@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0.5dp"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Main Content Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvMessageIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="40sp"
+                android:layout_marginEnd="16dp"
+                tools:text="🍔" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvMessageText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/md_theme_onSurface"
+                    android:layout_marginBottom="4dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="Rapikan mainanmu sebelum tidur" />
+
+                <TextView
+                    android:id="@+id/tvMessageStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    tools:text="⏳ Dibuat pada 15/08 14:30" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Action Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeleteMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hapus"
+            android:minWidth="0dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            app:cornerRadius="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            app:strokeColor="@color/md_theme_error"
+            android:textColor="@color/md_theme_error"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/md_theme_error"
+            app:iconGravity="textStart"
+            app:iconSize="16dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

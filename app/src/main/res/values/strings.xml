@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">Papan Ajaib</string>
+
+    <!-- Setup Activity -->
+    <string name="welcome_title">Selamat Datang di\nPapan Ajaib! ✨</string>
+    <string name="welcome_subtitle">Hubungkan keluarga Anda untuk mulai berbagi tugas</string>
+    <string name="who_are_you">Saya adalah:</string>
+
+    <!-- Parent Section -->
+    <string name="parent_role">👨‍👩‍👧‍👦 Orang Tua</string>
+    <string name="parent_desc">Buat keluarga baru dan kelola tugas untuk anak</string>
+    <string name="family_name_hint">Nama Keluarga (misal: Keluarga Budi)</string>
+    <string name="create_family">Buat Keluarga Baru</string>
+
+    <!-- Child Section -->
+    <string name="child_role">🧒 Anak</string>
+    <string name="child_desc">Bergabung dengan keluarga menggunakan kode</string>
+    <string name="family_code_hint">Kode Keluarga (6 karakter)</string>
+    <string name="join_family">Bergabung dengan Keluarga</string>
+
+    <!-- Messages -->
+    <string name="family_created_title">Keluarga Berhasil Dibuat!</string>
+    <string name="family_created_message">Kode Keluarga Anda:\n\n%1$s\n\nBerikan kode ini kepada anak untuk bergabung.</string>
+    <string name="continue_button">Lanjutkan</string>
+
+    <!-- Errors -->
+    <string name="family_name_empty">Nama keluarga tidak boleh kosong</string>
+    <string name="invalid_family_code">Kode keluarga harus 6 karakter</string>
+    <string name="family_code_not_found">Kode keluarga tidak ditemukan</string>
+    <string name="family_config_not_found">Konfigurasi keluarga tidak ditemukan</string>
+
+    <!-- Success Messages -->
+    <string name="family_joined_success">Berhasil bergabung dengan %1$s!</string>
+    <string name="family_create_failed">Gagal membuat keluarga: %1$s</string>
+    <string name="family_check_failed">Gagal mengecek kode keluarga: %1$s</string>
+
+    <!-- Reset -->
+    <string name="reset_family_title">Reset Keluarga</string>
+    <string name="reset_family_message">Apakah Anda yakin ingin reset konfigurasi keluarga?</string>
+    <string name="yes">Ya</string>
+    <string name="no">Tidak</string>
+</resources>

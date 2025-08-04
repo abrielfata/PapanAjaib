@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "613977980710",
+    "project_id": "papanajaibfirebase",
+    "storage_bucket": "papanajaibfirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613977980710:android:cf714a1e69d8cf2a1a8be7",
+        "android_client_info": {
+          "package_name": "com.example.papanajaib"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEimGF8p4QbO7TtH4B0VkTEAJ8Pi-qZmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
