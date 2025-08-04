@@ -23,23 +23,21 @@
             android:theme="@style/Theme.PapanAjaib">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- MainActivity bukan LAUNCHER lagi -->
+        </activity>
+
+        <!-- MainActivity bukan LAUNCHER lagi -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
         <activity
             android:name=".ParentActivity"
             android:exported="false" />
+
         <activity
             android:name=".ChildActivity"
             android:exported="false" />
-        <activity
-            android:name=".AchievementActivity"
-            android:exported="false" />
-
     </application>
-
 </manifest>

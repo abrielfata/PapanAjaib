@@ -12,7 +12,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         app:cardCornerRadius="12dp"
         app:cardBackgroundColor="@color/md_theme_primaryContainer">
 
@@ -30,7 +30,19 @@
                 android:text="Keluarga Kita\nKode: ABC123"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:textColor="@color/md_theme_onPrimaryContainer" />
+                android:textStyle="bold"
+                android:textColor="@color/md_theme_onPrimaryContainer"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvUserInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login sebagai: Orang Tua\nEmail: user@example.com"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textColor="@color/md_theme_onPrimaryContainer"
+                android:alpha="0.8" />
 
         </LinearLayout>
 
@@ -83,13 +95,29 @@
         app:icon="@drawable/ic_child_icon"
         app:iconGravity="textStart" />
 
-    <!-- Tombol Reset untuk Testing -->
+    <!-- Logout Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:text="🚪 Logout"
+        android:textSize="14sp"
+        android:layout_marginBottom="16dp"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        app:strokeColor="@color/md_theme_error"
+        android:textColor="@color/md_theme_error"
+        app:icon="@drawable/ic_logout"
+        app:iconTint="@color/md_theme_error" />
+
+    <!-- Reset Button untuk Testing -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnResetFamily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset Keluarga"
-        android:textSize="12sp"
-        android:visibility="visible"/>
+        android:text="⚠️ Reset Keluarga (Testing)"
+        android:textSize="10sp"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Button.TextButton"
+        android:textColor="@color/md_theme_error" />
 
 </LinearLayout>

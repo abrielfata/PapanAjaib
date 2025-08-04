@@ -1,10 +1,12 @@
 package com.example.papanajaib
 
+import ChildMessageAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.example.papanajaib.data.Message
 import com.example.papanajaib.databinding.ActivityChildBinding
-import com.example.papanajaib.adapter.ChildMessageAdapter
 import com.example.papanajaib.utils.FamilyManager
 
 class ChildActivity : AppCompatActivity() {
@@ -22,6 +23,10 @@ class ChildActivity : AppCompatActivity() {
     private lateinit var messageList: MutableList<Message>
     private lateinit var adapter: ChildMessageAdapter
     private lateinit var familyId: String
+    private var valueEventListener: ValueEventListener? = null
+
+    // Add flag to prevent multiple simultaneous updates
+    private var isUpdatingMessage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,46 +91,88 @@ class ChildActivity : AppCompatActivity() {
     }
 
     private fun toggleMessageCompletion(message: Message) {
+        // Prevent multiple simultaneous updates
+        if (isUpdatingMessage) {
+            Log.d("ChildActivity", "Update already in progress, ignoring click")
+            return
+        }
+
+        isUpdatingMessage = true
         val newStatus = !message.isCompleted
+
+        Log.d("ChildActivity", "Toggling message ${message.id} to $newStatus")
 
         database.child(message.id).child("isCompleted").setValue(newStatus)
             .addOnSuccessListener {
-                Toast.makeText(this, "Status pesan diubah!", Toast.LENGTH_SHORT).show()
+                Log.d("ChildActivity", "Successfully updated message ${message.id}")
+
+                // Update local data immediately for better UX
+                val index = messageList.indexOfFirst { it.id == message.id }
+                if (index != -1) {
+                    messageList[index].isCompleted = newStatus
+                    adapter.notifyItemChanged(index)
+                }
+
+                // Show celebration if task completed
+                if (newStatus) {
+                    showCelebrationOverlay()
+                }
+
+                Toast.makeText(this,
+                    if (newStatus) "Tugas selesai! 🎉" else "Tugas dibatalkan",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                isUpdatingMessage = false
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Gagal mengubah status: ${it.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener { exception ->
+                Log.e("ChildActivity", "Failed to update message", exception)
+                Toast.makeText(this,
+                    "Gagal mengubah status: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                isUpdatingMessage = false
             }
     }
 
     private fun listenForMessages() {
         binding.swipeRefreshLayout.isRefreshing = true
 
-        database.addValueEventListener(object : ValueEventListener {
+        valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("ChildActivity", "Data changed, updating UI")
                 hideLoadingState()
 
-                messageList.clear()
+                val newMessages = mutableListOf<Message>()
                 for (messageSnapshot in snapshot.children) {
                     val message = messageSnapshot.getValue(Message::class.java)
                     message?.let {
-                        messageList.add(it)
+                        newMessages.add(it)
                     }
                 }
 
-                messageList.sortWith(compareBy<Message> { it.isCompleted }.thenByDescending { it.timestamp })
+                // Sort: incomplete tasks first, then by timestamp
+                newMessages.sortWith(compareBy<Message> { it.isCompleted }.thenByDescending { it.timestamp })
+
+                // Update adapter with new data
+                adapter.updateMessages(newMessages)
 
                 updateUI()
-                adapter.notifyDataSetChanged()
-
                 binding.swipeRefreshLayout.isRefreshing = false
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Log.e("ChildActivity", "Database error: ${error.message}")
                 hideLoadingState()
                 binding.swipeRefreshLayout.isRefreshing = false
-                Toast.makeText(this@ChildActivity, "Gagal memuat pesan: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ChildActivity,
+                    "Gagal memuat pesan: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        })
+        }
+
+        database.addValueEventListener(valueEventListener!!)
     }
 
     private fun updateUI() {
@@ -144,9 +191,14 @@ class ChildActivity : AppCompatActivity() {
         val progressPercentage = if (totalTasks > 0) (completedTasks * 100) / totalTasks else 0
 
         binding.tvProgress.text = "$completedTasks dari $totalTasks tugas selesai"
-        binding.progressIndicator.progress = progressPercentage
 
-        val animator = ObjectAnimator.ofInt(binding.progressIndicator, "progress", binding.progressIndicator.progress, progressPercentage)
+        // Animate progress bar
+        val animator = ObjectAnimator.ofInt(
+            binding.progressIndicator,
+            "progress",
+            binding.progressIndicator.progress,
+            progressPercentage
+        )
         animator.duration = 500
         animator.start()
     }
@@ -170,7 +222,6 @@ class ChildActivity : AppCompatActivity() {
     private fun showEmptyState() {
         binding.emptyStateView.visibility = View.VISIBLE
         binding.rvChildMessages.visibility = View.GONE
-
         binding.tvProgress.text = "0 dari 0 tugas selesai"
         binding.progressIndicator.progress = 0
     }
@@ -238,23 +289,11 @@ class ChildActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
-    private fun showAchievementOverlay() {
-        if (messageList.isEmpty()) {
-            Toast.makeText(this, "Belum ada tugas yang bisa diselesaikan!", Toast.LENGTH_SHORT).show()
-            return
+    override fun onDestroy() {
+        super.onDestroy()
+        // Remove listener to prevent memory leaks
+        valueEventListener?.let {
+            database.removeEventListener(it)
         }
-
-        val completedTasks = messageList.count { it.isCompleted }
-        val totalTasks = messageList.size
-
-        val message = when {
-            completedTasks == totalTasks -> "🏆 Semua tugas selesai! Hebat!"
-            completedTasks > totalTasks / 2 -> "⭐ Sudah lebih dari setengah! Lanjutkan!"
-            completedTasks > 0 -> "💪 Ada progress! Tetap semangat!"
-            else -> "🚀 Yuk mulai mengerjakan tugas!"
-        }
-
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
-    
 }
