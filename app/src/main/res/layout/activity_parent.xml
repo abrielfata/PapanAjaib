@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
+    android:background="@color/parent_theme_background"
     tools:context=".ParentActivity">
 
     <ScrollView
@@ -15,107 +15,197 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Buat Pesan Baru"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_onBackground"
-                android:layout_marginBottom="16dp"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMessageText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tulis pesan singkat..."
-                android:layout_marginBottom="8dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxStrokeColor="@color/md_theme_primary"
-                app:counterEnabled="true"
-                app:counterMaxLength="100"
-                app:helperText="0/100 karakter"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMessageText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
-                    android:maxLength="100"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilMessageIcon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tambahkan ikon (misal: 🍔, 🧸)"
-                android:layout_marginBottom="16dp"
-                app:boxCornerRadiusBottomEnd="8dp"
-                app:boxCornerRadiusBottomStart="8dp"
-                app:boxCornerRadiusTopEnd="8dp"
-                app:boxCornerRadiusTopStart="8dp"
-                app:boxStrokeColor="@color/md_theme_primary"
-                app:helperText="Pilih ikon untuk tugas"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMessageIcon"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLength="5"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Saran Ikon:"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_onBackground"
-                android:layout_marginBottom="8dp"/>
-
-            <HorizontalScrollView
+            <!-- Header Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:scrollbars="none">
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/parent_theme_primary">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/chipGroupIcons"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"/>
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-            </HorizontalScrollView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👨‍👩‍👧‍👦 Mode Orang Tua"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/parent_theme_onPrimary"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:id="@+id/tvStatistics"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Buat dan kelola pesan untuk keluarga"
+                        android:textSize="16sp"
+                        android:textColor="@color/parent_theme_onPrimary"
+                        android:layout_gravity="center_horizontal"
+                        android:alpha="0.9"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Create Message Section -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Belum ada pesan yang dibuat"
-                android:textSize="12sp"
-                android:textColor="@color/md_theme_onSurfaceVariant"
-                android:background="@drawable/stats_background"
-                android:padding="12dp"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/parent_theme_surface">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="✨ Buat Pesan Baru"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/parent_theme_onSurface"
+                        android:layout_marginBottom="16dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilMessageText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tulis pesan singkat..."
+                        android:layout_marginBottom="8dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxStrokeColor="@color/parent_theme_primary"
+                        app:hintTextColor="@color/parent_theme_primary"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="100"
+                        app:counterTextColor="@color/parent_theme_onSurfaceVariant"
+                        app:helperText="0/100 karakter"
+                        app:helperTextTextColor="@color/parent_theme_onSurfaceVariant"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etMessageText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences"
+                            android:maxLength="100"
+                            android:textColor="@color/parent_theme_onSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilMessageIcon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Tambahkan ikon (misal: 🍔, 🧸)"
+                        android:layout_marginBottom="16dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxStrokeColor="@color/parent_theme_secondary"
+                        app:hintTextColor="@color/parent_theme_secondary"
+                        app:helperText="Pilih ikon untuk tugas"
+                        app:helperTextTextColor="@color/parent_theme_onSurfaceVariant"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etMessageIcon"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLength="5"
+                            android:textColor="@color/parent_theme_onSurface"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Saran Ikon:"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/parent_theme_onSurface"
+                        android:layout_marginBottom="8dp"/>
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:scrollbars="none">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupIcons"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleLine="true"/>
+
+                    </HorizontalScrollView>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Statistics Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daftar Pesan Anda"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_onBackground"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/parent_theme_secondaryContainer">
 
+                <TextView
+                    android:id="@+id/tvStatistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📊 Belum ada pesan yang dibuat"
+                    android:textSize="14sp"
+                    android:textColor="@color/parent_theme_onSecondaryContainer"
+                    android:padding="16dp"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Messages List Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="📝 Daftar Pesan Anda"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/parent_theme_onBackground"/>
+
+                <View
+                    android:layout_width="60dp"
+                    android:layout_height="2dp"
+                    android:background="@color/parent_theme_primary"/>
+
+            </LinearLayout>
+
+            <!-- Empty State -->
             <LinearLayout
                 android:id="@+id/emptyStateView"
                 android:layout_width="match_parent"
@@ -136,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:text="Belum ada pesan"
                     android:textSize="18sp"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textColor="@color/parent_theme_onSurfaceVariant"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
@@ -144,10 +234,11 @@
                     android:layout_height="wrap_content"
                     android:text="Buat pesan pertama untuk anak Anda!"
                     android:textSize="14sp"
-                    android:textColor="@color/md_theme_onSurfaceVariant"/>
+                    android:textColor="@color/parent_theme_onSurfaceVariant"/>
 
             </LinearLayout>
 
+            <!-- Messages RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvParentMessages"
                 android:layout_width="match_parent"
@@ -156,30 +247,33 @@
                 android:clipToPadding="false"
                 android:paddingBottom="80dp"/>
 
+            <!-- Reset Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnResetAllMessages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="🗑️ Reset Semua Pesan"
-                android:backgroundTint="@color/md_theme_error"
-                android:textColor="@color/md_theme_onError"
+                android:backgroundTint="@color/parent_theme_error"
+                android:textColor="@color/parent_theme_onError"
                 app:cornerRadius="12dp"
                 android:paddingVertical="14dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="80dp"/>
 
+            <!-- Progress Bar -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:indeterminateTint="@color/md_theme_primary"/>
+                android:indeterminateTint="@color/parent_theme_primary"/>
 
         </LinearLayout>
 
     </ScrollView>
 
+    <!-- Enhanced FAB -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabCreateMessage"
         android:layout_width="wrap_content"
@@ -187,9 +281,12 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:text="✨ Buat Pesan"
-        android:textColor="@color/md_theme_onPrimary"
+        android:textColor="@color/parent_theme_onPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:icon="@drawable/ic_add"
-        app:iconTint="@color/md_theme_onPrimary"
-        app:backgroundTint="@color/md_theme_primary" />
+        app:iconTint="@color/parent_theme_onPrimary"
+        app:backgroundTint="@color/parent_theme_primary"
+        app:elevation="8dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

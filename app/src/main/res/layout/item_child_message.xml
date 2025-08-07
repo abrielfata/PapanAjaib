@@ -5,58 +5,119 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
     app:strokeColor="@color/md_theme_surfaceVariant"
-    app:strokeWidth="0.5dp"
-    app:cardBackgroundColor="@color/md_theme_surface">
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="@color/md_theme_surface"
+    android:background="@drawable/card_lift_animator"
+    android:stateListAnimator="@drawable/button_press_animator">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:orientation="vertical">
 
+        <!-- Content Container with Gradient Background -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:background="@drawable/soft_card_background"
+            android:padding="24dp">
 
-            <TextView
-                android:id="@+id/tvMessageIcon"
-                android:layout_width="wrap_content"
+            <!-- Icon and Text Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="64sp" android:layout_marginEnd="16dp"
-                tools:text="🧸" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="20dp">
 
-            <TextView
-                android:id="@+id/tvMessageText"
-                android:layout_width="0dp"
+                <!-- Icon with Enhanced Background -->
+                <FrameLayout
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="20dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/icon_circle_background" />
+
+                    <TextView
+                        android:id="@+id/tvMessageIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textSize="48sp"
+                        android:elevation="2dp"
+                        tools:text="🧸" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvMessageText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/md_theme_onSurface"
+                        android:lineSpacingExtra="4dp"
+                        tools:text="Waktunya Rapikan Mainan!" />
+
+                    <!-- Task Status Indicator -->
+                    <TextView
+                        android:id="@+id/tvTaskStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📋 Tugas baru"
+                        android:textSize="12sp"
+                        android:textColor="@color/md_theme_onSurfaceVariant"
+                        android:layout_marginTop="4dp"
+                        android:background="#20DBE2EF"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:textStyle="bold"
+                        android:drawablePadding="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Action Button with Enhanced Style -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnComplete"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="24sp"
+                android:text="✨ Sudah Dikerjakan"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/md_theme_onSurface"
-                tools:text="Waktunya Rapikan Mainan!" />
+                android:paddingVertical="16dp"
+                app:cornerRadius="16dp"
+                android:background="@drawable/premium_button_background"
+                android:textColor="@color/md_theme_onPrimary"
+                app:icon="@drawable/ic_check_circle_outline"
+                app:iconTint="@color/md_theme_onPrimary"
+                app:iconGravity="textEnd"
+                app:iconPadding="12dp"
+                android:elevation="4dp" />
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnComplete"
+        <!-- Sparkle Overlay for Visual Enhancement -->
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            tools:text="Sudah Dikerjakan"
-            android:textSize="18sp"
-            android:paddingVertical="14dp"
-            app:cornerRadius="12dp"
-            app:backgroundTint="@color/md_theme_secondary"
-            android:textColor="@color/md_theme_onSecondary"
-            app:icon="@drawable/ic_check_circle_outline"
-            app:iconTint="@color/md_theme_onSecondary"
-            app:iconGravity="textEnd"
-            app:iconPadding="16dp"/>
+            android:layout_height="match_parent"
+            android:background="@drawable/sparkle_overlay"
+            android:alpha="0.3" />
 
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

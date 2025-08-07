@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Legacy colors (keep for compatibility) -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,27 +9,77 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="md_theme_primary">#64B5F6</color>
+    <!-- New Primary Color Scheme -->
+    <color name="primary_cream">#F9F7F7</color>
+    <color name="primary_light_blue">#DBE2EF</color>
+    <color name="primary_medium_blue">#3F72AF</color>
+    <color name="primary_dark_navy">#112D4E</color>
+
+    <!-- Material Design 3 Theme Colors - Updated -->
+    <color name="md_theme_primary">#3F72AF</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#BBDEFB</color>
-    <color name="md_theme_onPrimaryContainer">#0D47A1</color>
-    <color name="md_theme_secondary">#FFD740</color>
-    <color name="md_theme_onSecondary">#333333</color>
-    <color name="md_theme_secondaryContainer">#FFFDE7</color>
-    <color name="md_theme_onSecondaryContainer">#FFAB00</color>
-    <color name="md_theme_tertiary">#B39DDB</color>
+    <color name="md_theme_primaryContainer">#DBE2EF</color>
+    <color name="md_theme_onPrimaryContainer">#112D4E</color>
+
+    <color name="md_theme_secondary">#3F72AF</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#DBE2EF</color>
+    <color name="md_theme_onSecondaryContainer">#112D4E</color>
+
+    <color name="md_theme_tertiary">#507DB0</color>
     <color name="md_theme_onTertiary">#FFFFFF</color>
-    <color name="md_theme_background">#F5F5F5</color>
-    <color name="md_theme_onBackground">#1A1C1E</color>
+    <color name="md_theme_tertiaryContainer">#DBE2EF</color>
+    <color name="md_theme_onTertiaryContainer">#112D4E</color>
+
+    <color name="md_theme_background">#F9F7F7</color>
+    <color name="md_theme_onBackground">#112D4E</color>
     <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#1A1C1E</color>
-    <color name="md_theme_surfaceVariant">#E0E0E0</color>
-    <color name="md_theme_onSurfaceVariant">#42474E</color>
-    <color name="md_theme_tertiaryContainer">#74777F</color>
-    <color name="md_theme_error">#B00020</color>
+    <color name="md_theme_onSurface">#112D4E</color>
+    <color name="md_theme_surfaceVariant">#DBE2EF</color>
+    <color name="md_theme_onSurfaceVariant">#3F72AF</color>
+
+    <color name="md_theme_error">#B3261E</color>
     <color name="md_theme_onError">#FFFFFF</color>
-    <color name="text_dark">@color/md_theme_onSurface</color>
-    <color name="text_light">@color/md_theme_onSurfaceVariant</color>
-    <color name="delete_red">@color/md_theme_error</color>
+    <color name="md_theme_errorContainer">#F9DEDC</color>
+    <color name="md_theme_onErrorContainer">#410E0B</color>
+
+    <color name="md_theme_outline">#79747E</color>
+    <color name="md_theme_outlineVariant">#CAC4D0</color>
+
+    <!-- Semantic Colors -->
+    <color name="text_primary">@color/md_theme_onBackground</color>
+    <color name="text_secondary">@color/md_theme_onSurfaceVariant</color>
     <color name="card_background">@color/md_theme_surface</color>
+    <color name="delete_red">@color/md_theme_error</color>
+
+    <!-- Additional Utility Colors -->
+    <color name="success_green">#4CAF50</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="info_blue">@color/md_theme_primary</color>
+
+    <color name="parent_theme_primary">#1B3C53</color>          <!-- Dark blue -->
+    <color name="parent_theme_onPrimary">#F9F3EF</color>        <!-- Light cream -->
+    <color name="parent_theme_primaryContainer">#456882</color>  <!-- Medium blue -->
+    <color name="parent_theme_onPrimaryContainer">#F9F3EF</color>
+    <color name="parent_theme_secondary">#D2C1B6</color>        <!-- Warm beige -->
+    <color name="parent_theme_onSecondary">#1B3C53</color>      <!-- Dark blue -->
+    <color name="parent_theme_secondaryContainer">#F9F3EF</color> <!-- Light cream -->
+    <color name="parent_theme_onSecondaryContainer">#1B3C53</color>
+    <color name="parent_theme_tertiary">#456882</color>         <!-- Medium blue -->
+    <color name="parent_theme_onTertiary">#F9F3EF</color>       <!-- Light cream -->
+    <color name="parent_theme_background">#F9F3EF</color>       <!-- Light cream -->
+    <color name="parent_theme_onBackground">#1B3C53</color>     <!-- Dark blue -->
+    <color name="parent_theme_surface">#FFFFFF</color>          <!-- Pure white -->
+    <color name="parent_theme_onSurface">#1B3C53</color>       <!-- Dark blue -->
+    <color name="parent_theme_surfaceVariant">#D2C1B6</color>   <!-- Warm beige -->
+    <color name="parent_theme_onSurfaceVariant">#456882</color> <!-- Medium blue -->
+    <color name="parent_theme_tertiaryContainer">#E8DDD4</color> <!-- Light beige -->
+    <color name="parent_theme_error">#B00020</color>
+    <color name="parent_theme_onError">#FFFFFF</color>
+
+    <!-- Gradient Colors for enhanced UI -->
+    <color name="gradient_start">#F9F7F7</color>
+    <color name="gradient_end">#DBE2EF</color>
+    <color name="gradient_primary_start">#3F72AF</color>
+    <color name="gradient_primary_end">#112D4E</color>
 </resources>

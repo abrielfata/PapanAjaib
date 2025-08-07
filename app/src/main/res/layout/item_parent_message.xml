@@ -9,9 +9,10 @@
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeWidth="0.5dp"
-    app:cardBackgroundColor="@color/md_theme_surface"
+    app:cardElevation="4dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/parent_theme_surfaceVariant"
+    app:cardBackgroundColor="@color/parent_theme_surface"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
@@ -20,23 +21,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="20dp">
 
-        <!-- Main Content Row -->
+        <!-- Icon and Status Indicator Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp">
 
-            <TextView
-                android:id="@+id/tvMessageIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="40sp"
-                android:layout_marginEnd="16dp"
-                tools:text="🍔" />
+            <!-- Message Icon with Background -->
+            <LinearLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:background="@drawable/icon_circle_background"
+                android:gravity="center"
+                android:layout_marginEnd="16dp">
 
+                <TextView
+                    android:id="@+id/tvMessageIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="36sp"
+                    tools:text="🍔" />
+
+            </LinearLayout>
+
+            <!-- Message Content -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -49,8 +61,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@color/md_theme_onSurface"
-                    android:layout_marginBottom="4dp"
+                    android:textColor="@color/parent_theme_onSurface"
+                    android:layout_marginBottom="6dp"
                     android:maxLines="2"
                     android:ellipsize="end"
                     tools:text="Rapikan mainanmu sebelum tidur" />
@@ -60,33 +72,58 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
-                    android:textColor="@color/md_theme_onSurfaceVariant"
+                    android:textColor="@color/parent_theme_onSurfaceVariant"
+                    android:background="@color/parent_theme_tertiaryContainer"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    app:cornerRadius="6dp"
                     tools:text="⏳ Dibuat pada 15/08 14:30" />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <!-- Action Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteMessage"
-            android:layout_width="wrap_content"
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/parent_theme_surfaceVariant"
+            android:layout_marginVertical="8dp"
+            android:alpha="0.3"/>
+
+        <!-- Action Button Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hapus"
-            android:minWidth="0dp"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="12dp"
-            app:cornerRadius="8dp"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            app:strokeColor="@color/md_theme_error"
-            android:textColor="@color/md_theme_error"
-            app:icon="@drawable/ic_delete"
-            app:iconTint="@color/md_theme_error"
-            app:iconGravity="textStart"
-            app:iconSize="16dp" />
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hapus"
+                android:minWidth="0dp"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                app:cornerRadius="10dp"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="@color/parent_theme_error"
+                android:textColor="@color/parent_theme_error"
+                app:icon="@drawable/ic_delete"
+                app:iconTint="@color/parent_theme_error"
+                app:iconGravity="textStart"
+                app:iconSize="18dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <!-- Subtle gradient overlay for depth -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sparkle_overlay"
+        android:alpha="0.05"/>
 
 </com.google.android.material.card.MaterialCardView>
