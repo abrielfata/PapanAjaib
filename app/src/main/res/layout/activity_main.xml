@@ -1,123 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="@color/md_theme_surface">
+    android:fillViewport="true"
+    android:background="?attr/colorSurface">
 
-    <!-- Header dengan info keluarga -->
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardBackgroundColor="@color/md_theme_primaryContainer">
+        android:orientation="vertical"
+        android:padding="24dp">
 
+        <!-- Family Info Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorPrimaryContainer">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Informasi Keluarga"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/tvFamilyInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading..."
+                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    android:lineSpacingExtra="4dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Connection Status Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvConnectionStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🔄 Memeriksa status..."
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:lineSpacingExtra="2dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Action Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:gravity="center">
+            android:layout_marginBottom="24dp">
 
-            <TextView
-                android:id="@+id/tvFamilyInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Keluarga Kita\nKode: ABC123"
-                android:textAlignment="center"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnParentMode"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:text="🛠️ Mode Orang Tua"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="12dp"
+                app:icon="@drawable/ic_parent_icon"
+                app:iconSize="24dp"
+                app:cornerRadius="12dp" />
 
-            <TextView
-                android:id="@+id/tvUserInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Login sebagai: Orang Tua\nEmail: user@example.com"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:alpha="0.8" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnChildMode"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:text="📋 Lihat Tugas"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp"
+                app:icon="@drawable/ic_child_icon"
+                app:iconSize="24dp"
+                app:cornerRadius="12dp"
+                style="@style/Widget.Material3.Button.TonalButton" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+        <!-- Settings Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pengaturan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginBottom="12dp" />
 
-    <!-- Logo Aplikasi -->
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="App logo" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnResetFamily"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="⚙️ Reset Keluarga"
+            android:textSize="14sp"
+            app:icon="@drawable/ic_setting"
+            app:iconSize="20dp"
+            app:cornerRadius="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Papan Ajaib ✨"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="@color/md_theme_primary"
-        android:layout_marginBottom="8dp" />
+        <!-- Tips Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="1dp"
+            app:cardBackgroundColor="?attr/colorSecondaryContainer">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Papan pengumuman digital untuk keluarga"
-        android:textSize="16sp"
-        android:textAlignment="center"
-        android:textColor="@color/md_theme_onSurfaceVariant"
-        android:layout_marginBottom="48dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-    <!-- Tombol Mode -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnParentMode"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
-        android:text="Mode Orang Tua"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"
-        app:icon="@drawable/ic_parent_icon"
-        app:iconGravity="textStart"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💡 Tips"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:layout_marginBottom="8dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnChildMode"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
-        android:text="Lihat Tugas"
-        android:textSize="16sp"
-        android:layout_marginBottom="32dp"
-        app:icon="@drawable/ic_child_icon"
-        app:iconGravity="textStart" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Bagikan kode keluarga kepada anggota keluarga lain\n• Orang tua dapat membuat dan mengelola tugas\n• Anak dapat melihat dan menyelesaikan tugas\n• Tekan menu ⋮ untuk opsi lainnya"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    android:lineSpacingExtra="2dp" />
 
-    <!-- Logout Button -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogout"
-        android:layout_width="200dp"
-        android:layout_height="48dp"
-        android:text="🚪 Logout"
-        android:textSize="14sp"
-        android:layout_marginBottom="16dp"
-        style="@style/Widget.Material3.Button.OutlinedButton"
-        app:strokeColor="@color/md_theme_error"
-        android:textColor="@color/md_theme_error"
-        app:icon="@drawable/ic_logout"
-        app:iconTint="@color/md_theme_error" />
+            </LinearLayout>
 
-    <!-- Reset Button untuk Testing -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnResetFamily"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="⚠️ Reset Keluarga (Testing)"
-        android:textSize="10sp"
-        android:visibility="gone"
-        style="@style/Widget.Material3.Button.TextButton"
-        android:textColor="@color/md_theme_error" />
+        </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

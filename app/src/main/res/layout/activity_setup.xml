@@ -37,9 +37,21 @@
             android:textSize="16sp"
             android:textAlignment="center"
             android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="32dp" />
+            android:layout_marginBottom="16dp" />
 
-        <!-- Pilihan Role -->
+        <!-- Restore Button (Hidden by default) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRestoreFamily"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Gunakan Konfigurasi Lama"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            app:icon="@drawable/ic_login"
+            app:backgroundTint="?attr/colorTertiary"
+            app:iconTint="?attr/colorOnTertiary" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
