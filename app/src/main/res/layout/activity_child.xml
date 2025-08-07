@@ -22,42 +22,17 @@
             android:padding="24dp"
             android:background="@drawable/gradient_header_background">
 
-            <!-- Title with Achievement Button Row -->
-            <LinearLayout
+            <!-- Title Section -->
+            <TextView
+                android:id="@+id/tv_Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:id="@+id/tv_Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="✨ Papan Ajaibmu! ✨"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/md_theme_onBackground"
-                    android:gravity="center" />
-
-                <!-- Achievement Button with Premium Style -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAchievements"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🏆"
-                    android:textSize="24sp"
-                    android:minWidth="56dp"
-                    android:minHeight="56dp"
-                    android:padding="8dp"
-                    app:cornerRadius="28dp"
-                    android:background="@drawable/premium_button_background"
-                    android:textColor="@color/md_theme_onPrimary"
-                    android:elevation="8dp"
-                    style="@style/Widget.Material3.Button.UnelevatedButton" />
-
-            </LinearLayout>
+                android:text="✨ Papan Ajaibmu! ✨"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/md_theme_onBackground"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
 
             <!-- Enhanced Progress Section -->
             <LinearLayout
@@ -182,7 +157,7 @@
 
     </LinearLayout>
 
-    <!-- Enhanced Celebration Overlay -->
+    <!-- Enhanced Celebration Overlay with Lottie Animation -->
     <FrameLayout
         android:id="@+id/celebration_Overlay"
         android:layout_width="match_parent"
@@ -192,6 +167,18 @@
         android:clickable="true"
         android:focusable="true">
 
+        <!-- Lottie Animation View -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_AnimationView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_speed="1.0" />
+
+        <!-- Fallback Text Celebration -->
         <TextView
             android:id="@+id/celebrationText"
             android:layout_width="wrap_content"
@@ -204,7 +191,8 @@
             android:shadowColor="@color/md_theme_primary"
             android:shadowRadius="10"
             android:shadowDx="2"
-            android:shadowDy="2" />
+            android:shadowDy="2"
+            android:visibility="visible" />
 
     </FrameLayout>
 

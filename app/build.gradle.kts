@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.auth)
     implementation("com.google.android.gms:play-services-auth:21.4.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

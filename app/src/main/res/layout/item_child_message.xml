@@ -91,7 +91,7 @@
 
             </LinearLayout>
 
-            <!-- Action Button with Enhanced Style -->
+            <!-- Action Button with Enhanced Style - FIXED -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnComplete"
                 android:layout_width="match_parent"
@@ -99,15 +99,17 @@
                 android:text="✨ Sudah Dikerjakan"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:textColor="@color/md_theme_onPrimary"
                 android:paddingVertical="16dp"
                 app:cornerRadius="16dp"
+                app:backgroundTint="@null"
                 android:background="@drawable/premium_button_background"
-                android:textColor="@color/md_theme_onPrimary"
                 app:icon="@drawable/ic_check_circle_outline"
                 app:iconTint="@color/md_theme_onPrimary"
                 app:iconGravity="textEnd"
                 app:iconPadding="12dp"
-                android:elevation="4dp" />
+                android:elevation="4dp"
+                style="@style/Widget.Material3.Button" />
 
         </LinearLayout>
 
