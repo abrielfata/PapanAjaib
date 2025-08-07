@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.auth)
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

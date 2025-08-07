@@ -3,6 +3,7 @@ package com.example.papanajaib
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,10 @@ class ParentActivity : AppCompatActivity() {
         setupInputFields()
         setupSuggestedIcons()
         setupClickListeners()
+
+        // Cleanup Firebase data untuk memastikan konsistensi
+        cleanupFirebaseData()
+
         listenForMessages()
     }
 
@@ -62,11 +67,15 @@ class ParentActivity : AppCompatActivity() {
             return false
         }
 
+        Log.d("ParentActivity", "🏠 Family ID: $familyId")
+
         // Initialize Firebase
         database = FirebaseDatabase.getInstance()
             .getReference("families")
             .child(familyId)
             .child("messages")
+
+        Log.d("ParentActivity", "🔗 Firebase path: families/$familyId/messages")
 
         // Initialize FCM
         try {
@@ -74,7 +83,7 @@ class ParentActivity : AppCompatActivity() {
             Notification.subscribeToParentNotifications()
         } catch (e: Exception) {
             // Log error but don't fail the app
-            e.printStackTrace()
+            Log.e("ParentActivity", "FCM initialization failed", e)
         }
 
         return true
@@ -251,18 +260,27 @@ class ParentActivity : AppCompatActivity() {
             return
         }
 
+        Log.d("ParentActivity", "🆕 Creating message:")
+        Log.d("ParentActivity", "   ID: $messageId")
+        Log.d("ParentActivity", "   Text: $text")
+        Log.d("ParentActivity", "   Icon: $icon")
+
         val message = Message(
             id = messageId,
             text = text,
             icon = icon,
-            familyId = familyId
+            isCompleted = false, // Explicitly set to false
+            familyId = familyId,
+            timestamp = System.currentTimeMillis()
         )
 
         database.child(messageId).setValue(message)
             .addOnSuccessListener {
+                Log.d("ParentActivity", "✅ Message created successfully: $messageId")
                 onCreateSuccess(text, icon)
             }
             .addOnFailureListener { exception ->
+                Log.e("ParentActivity", "❌ Failed to create message", exception)
                 onCreateFailure(exception)
             }
     }
@@ -326,7 +344,7 @@ class ParentActivity : AppCompatActivity() {
             Notification.triggerNewTaskNotification(taskText, taskIcon)
         } catch (e: Exception) {
             // Don't fail the creation if notification fails
-            e.printStackTrace()
+            Log.e("ParentActivity", "Notification failed", e)
         }
     }
 
@@ -348,11 +366,15 @@ class ParentActivity : AppCompatActivity() {
     }
 
     private fun deleteMessage(message: Message) {
+        Log.d("ParentActivity", "🗑️ Deleting message: ${message.id}")
+
         database.child(message.id).removeValue()
             .addOnSuccessListener {
+                Log.d("ParentActivity", "✅ Message deleted successfully")
                 Toast.makeText(this, "Pesan dihapus!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { exception ->
+                Log.e("ParentActivity", "❌ Failed to delete message", exception)
                 Toast.makeText(this, "Gagal menghapus: ${exception.message}", Toast.LENGTH_LONG).show()
             }
     }
@@ -374,16 +396,20 @@ class ParentActivity : AppCompatActivity() {
     }
 
     private fun resetAllMessages() {
+        Log.d("ParentActivity", "🧹 Resetting all messages")
+
         database.removeValue()
             .addOnSuccessListener {
+                Log.d("ParentActivity", "✅ All messages reset successfully")
                 Toast.makeText(this, "Semua pesan berhasil dihapus! 🧹", Toast.LENGTH_SHORT).show()
                 try {
                     Notification.triggerResetNotification()
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    Log.e("ParentActivity", "Reset notification failed", e)
                 }
             }
             .addOnFailureListener { exception ->
+                Log.e("ParentActivity", "❌ Failed to reset messages", exception)
                 Toast.makeText(this, "Gagal reset: ${exception.message}", Toast.LENGTH_LONG).show()
             }
     }
@@ -410,21 +436,39 @@ class ParentActivity : AppCompatActivity() {
     }
 
     private fun listenForMessages() {
+        Log.d("ParentActivity", "🔗 Starting Firebase listener")
+
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("ParentActivity", "🔄 Data changed, updating UI")
+                Log.d("ParentActivity", "   Snapshot exists: ${snapshot.exists()}")
+                Log.d("ParentActivity", "   Children count: ${snapshot.childrenCount}")
+
                 messageList.clear()
 
                 for (messageSnapshot in snapshot.children) {
                     val message = messageSnapshot.getValue(Message::class.java)
                     message?.let {
+                        Log.d("ParentActivity", "📝 Message loaded:")
+                        Log.d("ParentActivity", "   ID: ${it.id}")
+                        Log.d("ParentActivity", "   Text: ${it.text}")
+                        Log.d("ParentActivity", "   Icon: ${it.icon}")
+                        Log.d("ParentActivity", "   Completed: ${it.isCompleted}")
+                        Log.d("ParentActivity", "   FamilyId: ${it.familyId}")
+
                         if (it.text.isNotEmpty() && it.familyId.isNotEmpty()) {
                             messageList.add(it)
+                        } else {
+                            Log.w("ParentActivity", "⚠️ Skipping invalid message: ${it.id}")
                         }
-                    }
+                    } ?: Log.w("ParentActivity", "⚠️ Failed to parse message: ${messageSnapshot.key}")
                 }
 
                 // Sort by timestamp (newest first)
                 messageList.sortByDescending { it.timestamp }
+
+                Log.d("ParentActivity", "📊 Final message list size: ${messageList.size}")
+
                 adapter.notifyDataSetChanged()
 
                 // Update UI state
@@ -435,9 +479,12 @@ class ParentActivity : AppCompatActivity() {
                 val total = messageList.size
                 val pending = total - completed
                 updateStatistics(total, completed, pending)
+
+                Log.d("ParentActivity", "📈 Statistics - Total: $total, Completed: $completed, Pending: $pending")
             }
 
             override fun onCancelled(error: DatabaseError) {
+                Log.e("ParentActivity", "❌ Database error: ${error.message}")
                 Toast.makeText(
                     this@ParentActivity,
                     "Gagal memuat pesan: ${error.message}",
@@ -462,6 +509,67 @@ class ParentActivity : AppCompatActivity() {
         binding.btnResetAllMessages.alpha = if (messageList.isNotEmpty()) 1.0f else 0.6f
     }
 
+    // Method untuk cleanup Firebase data dan memastikan konsistensi
+    private fun cleanupFirebaseData() {
+        Log.d("ParentActivity", "🧹 Starting Firebase data cleanup...")
+
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var cleanupCount = 0
+
+                for (messageSnapshot in snapshot.children) {
+                    val messageRef = messageSnapshot.ref
+
+                    // Check if ada field 'completed' yang duplicate
+                    if (messageSnapshot.hasChild("completed")) {
+                        val completedValue = messageSnapshot.child("completed").getValue(Boolean::class.java) ?: false
+                        val isCompletedValue = messageSnapshot.child("isCompleted").getValue(Boolean::class.java) ?: false
+
+                        Log.d("Cleanup", "📝 Cleaning message ${messageSnapshot.key}:")
+                        Log.d("Cleanup", "   completed: $completedValue")
+                        Log.d("Cleanup", "   isCompleted: $isCompletedValue")
+
+                        // Ambil nilai yang benar (prioritas isCompleted)
+                        val correctValue = if (messageSnapshot.hasChild("isCompleted")) isCompletedValue else completedValue
+
+                        // Update dengan nilai yang benar dan hapus field 'completed'
+                        val updates = mapOf<String, Any?>(
+                            "isCompleted" to correctValue,
+                            "completed" to null // null akan menghapus field
+                        )
+
+                        messageRef.updateChildren(updates)
+                            .addOnSuccessListener {
+                                Log.d("Cleanup", "✅ Cleaned up message ${messageSnapshot.key}")
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.e("Cleanup", "❌ Failed to cleanup ${messageSnapshot.key}", exception)
+                            }
+
+                        cleanupCount++
+                    }
+
+                    // Pastikan setiap message punya field isCompleted
+                    if (!messageSnapshot.hasChild("isCompleted")) {
+                        Log.d("Cleanup", "⚠️ Message ${messageSnapshot.key} missing isCompleted field, adding default")
+                        messageRef.child("isCompleted").setValue(false)
+                        cleanupCount++
+                    }
+                }
+
+                if (cleanupCount > 0) {
+                    Log.d("Cleanup", "🧹 Cleaned up $cleanupCount messages")
+                } else {
+                    Log.d("Cleanup", "✅ No cleanup needed, all data is consistent")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("Cleanup", "❌ Cleanup failed", error.toException())
+            }
+        })
+    }
+
     private fun showErrorAndFinish(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         finish()
@@ -471,5 +579,6 @@ class ParentActivity : AppCompatActivity() {
         super.onDestroy()
         // Clean up if needed
         isCreatingMessage = false
+        Log.d("ParentActivity", "🏁 ParentActivity destroyed")
     }
 }

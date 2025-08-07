@@ -1,6 +1,5 @@
 package com.example.papanajaib
 
-import ChildMessageAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
@@ -11,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.papanajaib.adapter.ChildMessageAdapter
 import com.google.firebase.database.*
 import com.example.papanajaib.data.Message
 import com.example.papanajaib.databinding.ActivityChildBinding
@@ -100,20 +100,15 @@ class ChildActivity : AppCompatActivity() {
         isUpdatingMessage = true
         val newStatus = !message.isCompleted
 
-        Log.d("ChildActivity", "Toggling message ${message.id} to $newStatus")
+        Log.d("ChildActivity", "Toggling message ${message.id} from ${message.isCompleted} to $newStatus")
+
+        // JANGAN update UI dulu - tunggu Firebase response
 
         database.child(message.id).child("isCompleted").setValue(newStatus)
             .addOnSuccessListener {
-                Log.d("ChildActivity", "Successfully updated message ${message.id}")
+                Log.d("ChildActivity", "✅ Successfully updated message ${message.id} to $newStatus")
 
-                // Update local data immediately for better UX
-                val index = messageList.indexOfFirst { it.id == message.id }
-                if (index != -1) {
-                    messageList[index].isCompleted = newStatus
-                    adapter.notifyItemChanged(index)
-                }
-
-                // Show celebration if task completed
+                // Tampilkan feedback sukses
                 if (newStatus) {
                     showCelebrationOverlay()
                 }
@@ -126,27 +121,39 @@ class ChildActivity : AppCompatActivity() {
                 isUpdatingMessage = false
             }
             .addOnFailureListener { exception ->
-                Log.e("ChildActivity", "Failed to update message", exception)
+                Log.e("ChildActivity", "❌ Failed to update message ${message.id}", exception)
+
+                // Reset UI jika gagal update Firebase
+                val index = messageList.indexOfFirst { it.id == message.id }
+                if (index != -1) {
+                    // Revert perubahan UI
+                    messageList[index].isCompleted = message.isCompleted // kembalikan ke status awal
+                    adapter.notifyItemChanged(index)
+                }
+
                 Toast.makeText(this,
                     "Gagal mengubah status: ${exception.message}",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 isUpdatingMessage = false
             }
     }
+
 
     private fun listenForMessages() {
         binding.swipeRefreshLayout.isRefreshing = true
 
         valueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("ChildActivity", "Data changed, updating UI")
+                Log.d("ChildActivity", "🔄 Data changed, updating UI")
                 hideLoadingState()
 
                 val newMessages = mutableListOf<Message>()
                 for (messageSnapshot in snapshot.children) {
                     val message = messageSnapshot.getValue(Message::class.java)
                     message?.let {
+                        Log.d("ChildActivity", "📝 Message: ${it.id} - ${it.text} - Completed: ${it.isCompleted}")
                         newMessages.add(it)
                     }
                 }
@@ -154,7 +161,7 @@ class ChildActivity : AppCompatActivity() {
                 // Sort: incomplete tasks first, then by timestamp
                 newMessages.sortWith(compareBy<Message> { it.isCompleted }.thenByDescending { it.timestamp })
 
-                // Update adapter with new data
+                // Update adapter dengan updateMessages() method
                 adapter.updateMessages(newMessages)
 
                 updateUI()
@@ -162,7 +169,7 @@ class ChildActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ChildActivity", "Database error: ${error.message}")
+                Log.e("ChildActivity", "❌ Database error: ${error.message}")
                 hideLoadingState()
                 binding.swipeRefreshLayout.isRefreshing = false
                 Toast.makeText(this@ChildActivity,
@@ -289,6 +296,7 @@ class ChildActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         // Remove listener to prevent memory leaks
@@ -296,4 +304,6 @@ class ChildActivity : AppCompatActivity() {
             database.removeEventListener(it)
         }
     }
+
+
 }

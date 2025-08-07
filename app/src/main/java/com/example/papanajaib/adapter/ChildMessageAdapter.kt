@@ -1,6 +1,9 @@
+package com.example.papanajaib.adapter
+
 
 import android.animation.ObjectAnimator
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -36,6 +39,8 @@ class ChildMessageAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(message: Message) {
+            Log.d("ChildAdapter", "🔗 Binding message: ${message.id} - ${message.text} - Completed: ${message.isCompleted}")
+
             binding.tvMessageText.text = message.text
             binding.tvMessageIcon.text = message.icon
 
@@ -44,13 +49,18 @@ class ChildMessageAdapter(
             // Set click listener dengan protection terhadap multiple clicks
             binding.btnComplete.setOnClickListener {
                 if (binding.btnComplete.isEnabled) {
+                    Log.d("ChildAdapter", "🔘 Button clicked for message: ${message.id}")
+
                     // Disable button immediately to prevent double clicks
                     binding.btnComplete.isEnabled = false
 
                     // Add button press animation
                     animateButtonPress(binding.btnComplete) {
                         // Re-enable button after animation and callback
-                        binding.btnComplete.isEnabled = !message.isCompleted
+                        binding.btnComplete.postDelayed({
+                            binding.btnComplete.isEnabled = true
+                        }, 1000)
+
                         onCompleteClick(message)
                     }
                 }
@@ -58,6 +68,8 @@ class ChildMessageAdapter(
         }
 
         private fun updateCompletionState(message: Message) {
+            Log.d("ChildAdapter", "🎨 Updating UI for message: ${message.id}, isCompleted: ${message.isCompleted}")
+
             if (message.isCompleted) {
                 // Completed state
                 binding.tvMessageText.paintFlags =
@@ -77,8 +89,8 @@ class ChildMessageAdapter(
                 binding.btnComplete.iconTint =
                     ContextCompat.getColorStateList(itemView.context, R.color.md_theme_onPrimary)
 
-                // Disable button when completed
-                binding.btnComplete.isEnabled = false
+                // Keep enabled untuk undo
+                binding.btnComplete.isEnabled = true
                 binding.btnComplete.alpha = 0.7f
 
             } else {
@@ -131,17 +143,27 @@ class ChildMessageAdapter(
         }
     }
 
-    // Improved update method using DiffUtil for better performance
+    // Improved update method dengan logging yang lebih detail
     fun updateMessages(newMessages: List<Message>) {
-        val diffCallback = MessageDiffCallback(messages, newMessages)
+        Log.d("ChildAdapter", "📱 UpdateMessages called with ${newMessages.size} messages")
+        Log.d("ChildAdapter", "📱 Current messages count: ${messages.size}")
+
+        // Log detail messages untuk debug
+        newMessages.forEachIndexed { index, message ->
+            Log.d("ChildAdapter", "📝 New[$index]: ${message.id} - ${message.text} - Completed: ${message.isCompleted}")
+        }
+
+        val diffCallback = MessageDiffCallback(messages.toList(), newMessages)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         messages.clear()
         messages.addAll(newMessages)
         diffResult.dispatchUpdatesTo(this)
+
+        Log.d("ChildAdapter", "✅ Messages updated successfully. New count: ${messages.size}")
     }
 
-    // DiffUtil callback for efficient updates
+    // DiffUtil callback untuk efficient updates
     private class MessageDiffCallback(
         private val oldList: List<Message>,
         private val newList: List<Message>
@@ -151,15 +173,23 @@ class ChildMessageAdapter(
         override fun getNewListSize(): Int = newList.size
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition].id == newList[newItemPosition].id
+            val result = oldList[oldItemPosition].id == newList[newItemPosition].id
+            Log.d("DiffUtil", "areItemsTheSame[$oldItemPosition-$newItemPosition]: $result")
+            return result
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldMessage = oldList[oldItemPosition]
             val newMessage = newList[newItemPosition]
-            return oldMessage.text == newMessage.text &&
+            val result = oldMessage.text == newMessage.text &&
                     oldMessage.icon == newMessage.icon &&
                     oldMessage.isCompleted == newMessage.isCompleted
+
+            Log.d("DiffUtil", "areContentsTheSame[$oldItemPosition-$newItemPosition]: $result")
+            Log.d("DiffUtil", "  Old: text='${oldMessage.text}', completed=${oldMessage.isCompleted}")
+            Log.d("DiffUtil", "  New: text='${newMessage.text}', completed=${newMessage.isCompleted}")
+
+            return result
         }
     }
 }
