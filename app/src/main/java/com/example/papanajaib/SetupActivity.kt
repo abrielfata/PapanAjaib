@@ -44,22 +44,6 @@ class SetupActivity : AppCompatActivity() {
             playAnimation()
         }
 
-        // Setup parent card animation
-        binding.lottieParent.apply {
-            setAnimation(R.raw.astro) // Gunakan resource ID
-            repeatCount = -1
-            speed = 1.2f
-            playAnimation()
-        }
-
-        // Setup child card animation
-        binding.lottieChild.apply {
-            setAnimation(R.raw.astro) // Gunakan resource ID
-            repeatCount = -1
-            speed = 1.0f
-            playAnimation()
-        }
-
         // Setup footer animation
         binding.lottieFooter.apply {
             setAnimation(R.raw.astro) // Gunakan resource ID
@@ -80,20 +64,6 @@ class SetupActivity : AppCompatActivity() {
                 playAnimation()
             }
 
-            binding.lottieParent.apply {
-                setAnimation("astro.json")
-                repeatCount = -1
-                speed = 1.2f
-                playAnimation()
-            }
-
-            binding.lottieChild.apply {
-                setAnimation("astro.json")
-                repeatCount = -1
-                speed = 1.0f
-                playAnimation()
-            }
-
             binding.lottieFooter.apply {
                 setAnimation("astro.json")
                 repeatCount = -1
@@ -106,8 +76,6 @@ class SetupActivity : AppCompatActivity() {
 
             // Gunakan animasi built-in atau disable animasi
             binding.lottieWelcomeAstro.visibility = View.GONE
-            binding.lottieParent.visibility = View.GONE
-            binding.lottieChild.visibility = View.GONE
             binding.lottieFooter.visibility = View.GONE
         }
     }
@@ -119,16 +87,12 @@ class SetupActivity : AppCompatActivity() {
 
         // Speed up all animations for success feedback
         binding.lottieWelcomeAstro.speed = 2.0f
-        binding.lottieParent.speed = 2.5f
-        binding.lottieChild.speed = 2.5f
         binding.lottieFooter.speed = 3.0f
 
         // Reset speeds after animation
         binding.root.postDelayed({
             if (::binding.isInitialized) {
                 binding.lottieWelcomeAstro.speed = 0.6f
-                binding.lottieParent.speed = 1.2f
-                binding.lottieChild.speed = 1.0f
                 binding.lottieFooter.speed = 2.0f
             }
         }, 2000)
@@ -142,14 +106,10 @@ class SetupActivity : AppCompatActivity() {
         if (isLoading) {
             // Slow down animations during loading
             binding.lottieWelcomeAstro.speed = 0.3f
-            binding.lottieParent.speed = 0.5f
-            binding.lottieChild.speed = 0.5f
             binding.lottieFooter.speed = 1.0f
         } else {
             // Resume normal speeds
             binding.lottieWelcomeAstro.speed = 0.6f
-            binding.lottieParent.speed = 1.2f
-            binding.lottieChild.speed = 1.0f
             binding.lottieFooter.speed = 2.0f
         }
     }
@@ -221,7 +181,7 @@ class SetupActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btnCreateFamily.setOnClickListener {
-            binding.lottieParent.apply {
+            binding.Parent.apply {
                 speed = 3.0f
                 postDelayed({ speed = 1.2f }, 1000)
             }
@@ -229,7 +189,7 @@ class SetupActivity : AppCompatActivity() {
         }
 
         binding.btnJoinFamily.setOnClickListener {
-            binding.lottieChild.apply {
+            binding.Child.apply {
                 speed = 3.0f
                 postDelayed({ speed = 1.0f }, 1000)
             }
@@ -435,12 +395,6 @@ class SetupActivity : AppCompatActivity() {
             if (!binding.lottieWelcomeAstro.isAnimating) {
                 binding.lottieWelcomeAstro.resumeAnimation()
             }
-            if (!binding.lottieParent.isAnimating) {
-                binding.lottieParent.resumeAnimation()
-            }
-            if (!binding.lottieChild.isAnimating) {
-                binding.lottieChild.resumeAnimation()
-            }
             if (!binding.lottieFooter.isAnimating) {
                 binding.lottieFooter.resumeAnimation()
             }
@@ -456,8 +410,6 @@ class SetupActivity : AppCompatActivity() {
         super.onDestroy()
         if (::binding.isInitialized) {
             binding.lottieWelcomeAstro.cancelAnimation()
-            binding.lottieParent.cancelAnimation()
-            binding.lottieChild.cancelAnimation()
             binding.lottieFooter.cancelAnimation()
         }
     }

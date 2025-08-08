@@ -69,16 +69,7 @@
 
         </LinearLayout>
 
-        <!-- Icon sederhana menggantikan Lottie -->
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="16dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_ortu"
-            android:scaleType="centerInside" />
-
-        <!-- Family Info Card dengan margin yang lebih baik -->
+        <!-- Family Info Card dengan margin yang lebih baik dan custom icon -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,15 +88,33 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Header dengan icon custom untuk Family Info -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Family"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary_medium_blue"
-                    android:textAllCaps="true"
-                    android:letterSpacing="0.1"
-                    android:layout_marginBottom="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/ivFamilyIcon"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/ic_ortu"
+                        android:scaleType="centerInside"
+                        app:tint="@color/primary_medium_blue" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Family"
+                        android:textSize="12sp"
+                        android:textColor="@color/primary_medium_blue"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.1" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvFamilyInfo"
@@ -120,7 +129,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Status dengan padding dan tanpa Lottie -->
+        <!-- Status dengan custom icon -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -132,10 +141,11 @@
             android:layout_marginBottom="32dp"
             android:gravity="center_vertical">
 
-            <!-- Icon kecil menggantikan status indicator -->
+            <!-- Icon custom untuk status -->
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:id="@+id/ivStatusIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_logo"
                 android:scaleType="centerInside"

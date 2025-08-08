@@ -68,27 +68,35 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Papan Ajaib - $familyName"
         supportActionBar?.subtitle = if (isParent) "Mode Orang Tua" else "Mode Anak"
 
-        // Setup family info
+        // Setup family info dengan icon custom
         binding.tvFamilyInfo.text = buildString {
-            append("👨‍👩‍👧‍👦 $familyName\n")
-            append("🔑 Kode: $familyId\n")
-            append("👤 Role: ${if (isParent) "Orang Tua" else "Anak"}")
+            append("$familyName\n")
+            append("$familyId\n")
+            append("${if (isParent) "Orang Tua" else "Anak"}")
         }
 
-        // Setup status info (will be updated by listener)
+        // Set custom family icon berdasarkan role
+        if (isParent) {
+            binding.ivFamilyIcon.setImageResource(R.drawable.ic_ortu) // Ganti dengan icon parent Anda
+        } else {
+            binding.ivFamilyIcon.setImageResource(R.drawable.ic_logos)  // Ganti dengan icon child Anda
+        }
+
+        // Setup status info dengan icon loading
         binding.tvConnectionStatus.text = "🔄 Memeriksa status..."
         binding.tvConnectionStatus.visibility = View.VISIBLE
+        binding.ivStatusIcon.setImageResource(R.drawable.ic_loading) // Icon loading
 
         // Tampilkan tombol sesuai role
         if (isParent) {
             binding.btnParentMode.visibility = View.VISIBLE
             binding.btnChildMode.visibility = View.VISIBLE
-            binding.btnParentMode.text = "🛠️ Mode Orang Tua"
-            binding.btnChildMode.text = "👀 Lihat Sebagai Anak"
+            binding.btnParentMode.text = "Mode Orang Tua"
+            binding.btnChildMode.text = "Lihat Sebagai Anak"
         } else {
             binding.btnParentMode.visibility = View.GONE
             binding.btnChildMode.visibility = View.VISIBLE
-            binding.btnChildMode.text = "📋 Lihat Tugas"
+            binding.btnChildMode.text = "Lihat Tugas"
         }
 
         // Show reset button only for parents
@@ -110,6 +118,8 @@ class MainActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("MainActivity", "Family status monitoring failed", error.toException())
                 binding.tvConnectionStatus.text = "⚠️ Gagal memantau status keluarga"
+                // Set icon error
+                binding.ivStatusIcon.setImageResource(R.drawable.ic_error) // Icon error
             }
         }
 
@@ -119,6 +129,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleFamilyDeleted() {
         Log.w("MainActivity", "Family was deleted from Firebase")
+
+        // Set icon untuk status deleted/error
+        binding.ivStatusIcon.setImageResource(R.drawable.ic_delete)
 
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Ditemukan")
@@ -145,11 +158,22 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        // Update icon berdasarkan status koneksi
+        val isConnected = if (FamilyManager.isParent(this)) parentConnected else childConnected
+
+        if (isConnected) {
+            // Semua terhubung dengan baik
+            binding.ivStatusIcon.setImageResource(R.drawable.ic_connect) // Icon connected/success
+        } else {
+            // Ada masalah koneksi
+            binding.ivStatusIcon.setImageResource(R.drawable.ic_disconnect) // Icon disconnected/warning
+        }
+
         // Update UI dengan status koneksi
         val statusText = buildString {
-            append("📊 Status Keluarga:\n")
-            append("👨 Orang Tua: ${if (parentConnected) "✅ Terhubung" else "❌ Tidak aktif"}\n")
-            append("👶 Anak: ${if (childConnected) "✅ Terhubung" else "❌ Belum bergabung"}")
+            append("Status Keluarga:\n")
+            append("Orang Tua: ${if (parentConnected) "✅ Terhubung" else "❌ Tidak aktif"}\n")
+            append("Anak: ${if (childConnected) "✅ Terhubung" else "❌ Belum bergabung"}")
 
             if (lastActivity > 0) {
                 val timeDiff = System.currentTimeMillis() - lastActivity
@@ -163,8 +187,6 @@ class MainActivity : AppCompatActivity() {
         binding.tvConnectionStatus.text = statusText
 
         // Enable/disable tombol berdasarkan status
-        val isConnected = if (FamilyManager.isParent(this)) parentConnected else childConnected
-
         binding.btnParentMode.isEnabled = isConnected
         binding.btnChildMode.isEnabled = isConnected
 
@@ -178,6 +200,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleInactiveFamily() {
+        // Set icon untuk status inactive
+        binding.ivStatusIcon.setImageResource(R.drawable.ic_inactive)
+
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Aktif")
             .setMessage("Keluarga Anda telah dinonaktifkan.\n\nHubungi admin keluarga atau buat keluarga baru.")
@@ -253,6 +278,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_refresh -> {
+                // Set icon loading saat refresh
+                binding.ivStatusIcon.setImageResource(R.drawable.ic_loading)
                 monitorFamilyStatus()
                 android.widget.Toast.makeText(this, "Status direfresh", android.widget.Toast.LENGTH_SHORT).show()
                 true
