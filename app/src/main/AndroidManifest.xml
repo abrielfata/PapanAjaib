@@ -16,15 +16,9 @@
         android:theme="@style/Theme.PapanAjaib"
         tools:targetApi="31">
 
-        <!-- SplashActivity - Optional, bisa dihidupkan nanti setelah stabil -->
+        <!-- SplashActivity sebagai LAUNCHER (halaman pertama yang muncul) -->
         <activity
             android:name=".SplashActivity"
-            android:exported="false"
-            android:theme="@style/Theme.PapanAjaib"/>
-
-        <!-- Setup Activity sebagai LAUNCHER (kembali ke original) -->
-        <activity
-            android:name=".SetupActivity"
             android:exported="true"
             android:theme="@style/Theme.PapanAjaib">
             <intent-filter>
@@ -33,7 +27,13 @@
             </intent-filter>
         </activity>
 
-        <!-- MainActivity bukan LAUNCHER lagi -->
+        <!-- Setup Activity bukan LAUNCHER lagi -->
+        <activity
+            android:name=".SetupActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PapanAjaib" />
+
+        <!-- MainActivity bukan LAUNCHER -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />

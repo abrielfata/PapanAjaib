@@ -12,22 +12,26 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Load dan jalankan animasi
         val slideInAnim = AnimationUtils.loadAnimation(this, R.anim.slide_in)
         binding.lottieSplashAstro.startAnimation(slideInAnim)
         binding.tvAppName.startAnimation(slideInAnim)
 
+        // Setelah 3 detik, pindah ke SetupActivity (bukan MainActivity)
         lifecycleScope.launch {
-            delay(5000)
-            startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-            finish()
+            delay(3000) // Kurangi delay jadi 3 detik
+
+            // Pindah ke SetupActivity sebagai halaman selanjutnya
+            val intent = Intent(this@SplashActivity, SetupActivity::class.java)
+            startActivity(intent)
+            finish() // Tutup SplashActivity agar tidak bisa kembali
         }
-
-
     }
 }
