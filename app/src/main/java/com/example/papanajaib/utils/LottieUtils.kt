@@ -1,211 +1,151 @@
 package com.example.papanajaib.utils
 
+import android.util.Log
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieDrawable
 
 /**
- * Utility class untuk mengatur animasi Lottie dalam aplikasi Papan Ajaib
+ * Utility class untuk mengatur animasi Lottie dengan error handling yang lebih baik
  */
 object LottieUtils {
 
+    private const val TAG = "LottieUtils"
+
     /**
-     * Setup animasi Lottie dengan konfigurasi standar
+     * Setup animasi Lottie dengan error handling
      */
-    fun setupStandardAnimation(
-        lottieView: LottieAnimationView,
-        animationRes: String = "astro.json",
+    fun setupAnimation(
+        lottieView: LottieAnimationView?,
+        animationFileName: String = "astro.json",
         speed: Float = 1.0f,
         loop: Boolean = true,
         autoPlay: Boolean = true
     ) {
-        lottieView.apply {
-            setAnimation(animationRes)
-            this.speed = speed
-            repeatCount = if (loop) LottieDrawable.INFINITE else 0
-            if (autoPlay) {
-                playAnimation()
-            }
-        }
-    }
+        try {
+            lottieView?.apply {
+                // Pastikan view sudah ready
+                if (isAttachedToWindow) {
+                    setAnimation(animationFileName)
+                    this.speed = speed
+                    repeatCount = if (loop) -1 else 0
 
-    /**
-     * Animasi untuk status loading
-     */
-    fun setLoadingState(lottieView: LottieAnimationView, isLoading: Boolean) {
-        if (isLoading) {
-            lottieView.apply {
-                speed = 0.3f
-                alpha = 0.7f
-            }
-        } else {
-            lottieView.apply {
-                speed = 1.0f
-                alpha = 1.0f
-            }
-        }
-    }
+                    if (autoPlay) {
+                        playAnimation()
+                    }
 
-    /**
-     * Animasi untuk status sukses
-     */
-    fun animateSuccess(lottieView: LottieAnimationView, duration: Long = 2000L) {
-        lottieView.apply {
-            val originalSpeed = speed
-            speed = 2.5f
-            postDelayed({
-                speed = originalSpeed
-            }, duration)
-        }
-    }
-
-    /**
-     * Animasi untuk status error
-     */
-    fun animateError(lottieView: LottieAnimationView, duration: Long = 1500L) {
-        lottieView.apply {
-            val originalSpeed = speed
-            val originalAlpha = alpha
-            speed = 0.2f
-            alpha = 0.5f
-            postDelayed({
-                speed = originalSpeed
-                alpha = originalAlpha
-            }, duration)
-        }
-    }
-
-    /**
-     * Animasi untuk button press feedback
-     */
-    fun animateButtonPress(lottieView: LottieAnimationView, pressSpeed: Float = 3.0f, duration: Long = 1000L) {
-        lottieView.apply {
-            val originalSpeed = speed
-            speed = pressSpeed
-            postDelayed({
-                speed = originalSpeed
-            }, duration)
-        }
-    }
-
-    /**
-     * Set animasi berdasarkan status koneksi
-     */
-    fun setConnectionStatus(lottieView: LottieAnimationView, isConnected: Boolean) {
-        if (isConnected) {
-            lottieView.apply {
-                speed = 1.5f
-                alpha = 1.0f
-                if (!isAnimating) {
-                    resumeAnimation()
+                    Log.d(TAG, "Animation setup successful for: $animationFileName")
+                } else {
+                    // Delay setup sampai view attached
+                    post {
+                        setupAnimation(this, animationFileName, speed, loop, autoPlay)
+                    }
                 }
             }
-        } else {
-            lottieView.apply {
-                speed = 0.5f
-                alpha = 0.6f
-            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting up Lottie animation: ${e.message}")
+            // Jangan crash, hanya log error
         }
     }
 
     /**
-     * Pause semua animasi untuk menghemat battery
+     * Play animation dengan error handling
      */
-    fun pauseAnimation(vararg lottieViews: LottieAnimationView) {
-        lottieViews.forEach { it.pauseAnimation() }
-    }
-
-    /**
-     * Resume semua animasi
-     */
-    fun resumeAnimation(vararg lottieViews: LottieAnimationView) {
-        lottieViews.forEach {
-            if (!it.isAnimating) {
-                it.resumeAnimation()
-            }
+    fun playAnimation(lottieView: LottieAnimationView?) {
+        try {
+            lottieView?.takeIf { it.isAttachedToWindow }?.playAnimation()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error playing animation: ${e.message}")
         }
     }
 
     /**
-     * Cancel semua animasi (untuk onDestroy)
+     * Pause animation dengan error handling
      */
-    fun cancelAnimation(vararg lottieViews: LottieAnimationView) {
-        lottieViews.forEach { it.cancelAnimation() }
+    fun pauseAnimation(lottieView: LottieAnimationView?) {
+        try {
+            lottieView?.takeIf { it.isAttachedToWindow }?.pauseAnimation()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error pausing animation: ${e.message}")
+        }
     }
 
     /**
-     * Preset animasi untuk berbagai jenis feedback
+     * Resume animation dengan error handling
+     */
+    fun resumeAnimation(lottieView: LottieAnimationView?) {
+        try {
+            lottieView?.takeIf { it.isAttachedToWindow && !it.isAnimating }?.resumeAnimation()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error resuming animation: ${e.message}")
+        }
+    }
+
+    /**
+     * Cancel animation dengan error handling
+     */
+    fun cancelAnimation(lottieView: LottieAnimationView?) {
+        try {
+            lottieView?.cancelAnimation()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error cancelling animation: ${e.message}")
+        }
+    }
+
+    /**
+     * Update speed dengan error handling
+     */
+    fun setSpeed(lottieView: LottieAnimationView?, speed: Float) {
+        try {
+            lottieView?.speed = speed
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting speed: ${e.message}")
+        }
+    }
+
+    /**
+     * Update alpha dengan error handling
+     */
+    fun setAlpha(lottieView: LottieAnimationView?, alpha: Float) {
+        try {
+            lottieView?.alpha = alpha
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting alpha: ${e.message}")
+        }
+    }
+
+    /**
+     * Simple presets untuk berbagai keperluan
      */
     object Presets {
 
-        fun welcomeAnimation(lottieView: LottieAnimationView) {
-            setupStandardAnimation(lottieView, speed = 0.6f)
+        fun splash(lottieView: LottieAnimationView?) {
+            setupAnimation(lottieView, speed = 1.0f, loop = true)
         }
 
-        fun statusIndicator(lottieView: LottieAnimationView) {
-            setupStandardAnimation(lottieView, speed = 1.5f)
+        fun welcome(lottieView: LottieAnimationView?) {
+            setupAnimation(lottieView, speed = 0.6f, loop = true)
         }
 
-        fun buttonIcon(lottieView: LottieAnimationView) {
-            setupStandardAnimation(lottieView, speed = 1.2f)
+        fun status(lottieView: LottieAnimationView?) {
+            setupAnimation(lottieView, speed = 1.5f, loop = true)
         }
 
-        fun footerDecoration(lottieView: LottieAnimationView) {
-            setupStandardAnimation(lottieView, speed = 2.0f)
-        }
-
-        fun headerMain(lottieView: LottieAnimationView) {
-            setupStandardAnimation(lottieView, speed = 0.8f)
+        fun loading(lottieView: LottieAnimationView?) {
+            setupAnimation(lottieView, speed = 2.0f, loop = true)
         }
     }
 
     /**
-     * Animasi berdasarkan user role
+     * Batch operations untuk multiple views
      */
-    object RoleAnimations {
-
-        fun parentModeAnimation(lottieView: LottieAnimationView) {
-            lottieView.apply {
-                speed = 1.0f
-                alpha = 1.0f
-                playAnimation()
-            }
-        }
-
-        fun childModeAnimation(lottieView: LottieAnimationView) {
-            lottieView.apply {
-                speed = 1.2f
-                alpha = 1.0f
-                playAnimation()
-            }
-        }
+    fun pauseAll(vararg lottieViews: LottieAnimationView?) {
+        lottieViews.forEach { pauseAnimation(it) }
     }
 
-    /**
-     * Animasi berdasarkan state aplikasi
-     */
-    object StateAnimations {
+    fun resumeAll(vararg lottieViews: LottieAnimationView?) {
+        lottieViews.forEach { resumeAnimation(it) }
+    }
 
-        fun activeFamily(vararg lottieViews: LottieAnimationView) {
-            lottieViews.forEach { lottieView ->
-                lottieView.apply {
-                    speed = 1.0f
-                    alpha = 1.0f
-                    if (!isAnimating) resumeAnimation()
-                }
-            }
-        }
-
-        fun inactiveFamily(vararg lottieViews: LottieAnimationView) {
-            lottieViews.forEach { lottieView ->
-                lottieView.apply {
-                    speed = 0.3f
-                    alpha = 0.4f
-                }
-            }
-        }
-
-        fun familyDeleted(vararg lottieViews: LottieAnimationView) {
-            lottieViews.forEach { it.pauseAnimation() }
-        }
+    fun cancelAll(vararg lottieViews: LottieAnimationView?) {
+        lottieViews.forEach { cancelAnimation(it) }
     }
 }

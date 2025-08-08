@@ -7,9 +7,9 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.LottieAnimationView
 import com.example.papanajaib.databinding.ActivityMainBinding
 import com.example.papanajaib.utils.FamilyManager
+import com.example.papanajaib.utils.LottieUtils
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,10 +35,13 @@ class MainActivity : AppCompatActivity() {
         monitorFamilyStatus()
     }
 
+    // Update MainActivity.kt - bagian setupLottieAnimations()
+
     private fun setupLottieAnimations() {
+        // PERBAIKAN: Gunakan raw resource daripada asset
         // Setup main Lottie animation
         binding.lottieAstro.apply {
-            setAnimation("astro.json")
+            setAnimation(R.raw.astro) // Gunakan resource ID
             repeatCount = -1 // Infinite loop
             speed = 0.8f
             playAnimation()
@@ -46,37 +49,33 @@ class MainActivity : AppCompatActivity() {
 
         // Setup status indicator animation
         binding.lottieStatusIndicator.apply {
-            setAnimation("astro.json")
+            setAnimation(R.raw.astro) // Gunakan resource ID
             repeatCount = -1
             speed = 1.5f
             playAnimation()
         }
     }
 
+
     private fun updateLottieBasedOnStatus(isConnected: Boolean) {
-        // Control main animation based on connection status
-        if (isConnected) {
-            binding.lottieAstro.apply {
-                speed = 1.0f
-                alpha = 1.0f
-                resumeAnimation()
-            }
+        try {
+            if (isConnected) {
+                LottieUtils.setSpeed(binding.lottieAstro, 1.0f)
+                LottieUtils.setAlpha(binding.lottieAstro, 1.0f)
+                LottieUtils.resumeAnimation(binding.lottieAstro)
 
-            binding.lottieStatusIndicator.apply {
-                speed = 2.0f
-                alpha = 1.0f
-                resumeAnimation()
-            }
-        } else {
-            binding.lottieAstro.apply {
-                speed = 0.3f
-                alpha = 0.5f
-            }
+                LottieUtils.setSpeed(binding.lottieStatusIndicator, 2.0f)
+                LottieUtils.setAlpha(binding.lottieStatusIndicator, 1.0f)
+                LottieUtils.resumeAnimation(binding.lottieStatusIndicator)
+            } else {
+                LottieUtils.setSpeed(binding.lottieAstro, 0.3f)
+                LottieUtils.setAlpha(binding.lottieAstro, 0.5f)
 
-            binding.lottieStatusIndicator.apply {
-                speed = 0.5f
-                alpha = 0.7f
+                LottieUtils.setSpeed(binding.lottieStatusIndicator, 0.5f)
+                LottieUtils.setAlpha(binding.lottieStatusIndicator, 0.7f)
             }
+        } catch (e: Exception) {
+            Log.e("MainActivity", "Error updating Lottie status: ${e.message}")
         }
     }
 
@@ -138,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             binding.btnChildMode.text = "📋 Lihat Tugas"
         }
 
-        // Show reset button only for parents or in debug mode
+        // Show reset button only for parents
         binding.btnResetFamily.visibility = if (isParent) View.VISIBLE else View.GONE
     }
 
@@ -148,11 +147,9 @@ class MainActivity : AppCompatActivity() {
         familyStatusListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
-                    // Family tidak ada lagi di Firebase
                     handleFamilyDeleted()
                     return
                 }
-
                 updateFamilyStatus(snapshot)
             }
 
@@ -164,8 +161,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         database.addValueEventListener(familyStatusListener!!)
-
-        // Update last activity
         database.child("lastActivity").setValue(System.currentTimeMillis())
     }
 
@@ -173,8 +168,8 @@ class MainActivity : AppCompatActivity() {
         Log.w("MainActivity", "Family was deleted from Firebase")
 
         // Pause animations when family is deleted
-        binding.lottieAstro.pauseAnimation()
-        binding.lottieStatusIndicator.pauseAnimation()
+        LottieUtils.pauseAnimation(binding.lottieAstro)
+        LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
 
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Ditemukan")
@@ -238,8 +233,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleInactiveFamily() {
         // Pause animations when family is inactive
-        binding.lottieAstro.pauseAnimation()
-        binding.lottieStatusIndicator.pauseAnimation()
+        LottieUtils.pauseAnimation(binding.lottieAstro)
+        LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
 
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Aktif")
@@ -254,30 +249,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btnParentMode.setOnClickListener {
-            // Add a small animation effect when clicking
-            binding.lottieAstro.apply {
-                speed = 2.0f
-                playAnimation()
-                postDelayed({
-                    speed = 0.8f
+            // Simple animation feedback
+            try {
+                LottieUtils.setSpeed(binding.lottieAstro, 2.0f)
+                binding.root.postDelayed({
+                    LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
                 }, 1000)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error animating parent mode click: ${e.message}")
             }
             startActivity(Intent(this, ParentActivity::class.java))
         }
 
         binding.btnChildMode.setOnClickListener {
-            // Add a small animation effect when clicking
-            binding.lottieAstro.apply {
-                speed = 1.5f
-                playAnimation()
-                postDelayed({
-                    speed = 0.8f
+            // Simple animation feedback
+            try {
+                LottieUtils.setSpeed(binding.lottieAstro, 1.5f)
+                binding.root.postDelayed({
+                    LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
                 }, 1000)
+            } catch (e: Exception) {
+                Log.e("MainActivity", "Error animating child mode click: ${e.message}")
             }
             startActivity(Intent(this, ChildActivity::class.java))
         }
 
-        // Reset button untuk orang tua
         binding.btnResetFamily.setOnClickListener {
             showResetFamilyDialog()
         }
@@ -309,12 +305,13 @@ class MainActivity : AppCompatActivity() {
                 android.widget.Toast.makeText(this, "Semua pesan telah dihapus! 🧹", android.widget.Toast.LENGTH_SHORT).show()
 
                 // Animate success
-                binding.lottieAstro.apply {
-                    speed = 3.0f
-                    playAnimation()
-                    postDelayed({
-                        speed = 0.8f
+                try {
+                    LottieUtils.setSpeed(binding.lottieAstro, 3.0f)
+                    binding.root.postDelayed({
+                        LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
                     }, 2000)
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error animating reset success: ${e.message}")
                 }
             }
             .addOnFailureListener { exception ->
@@ -342,17 +339,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_refresh -> {
-                // Refresh family status
                 monitorFamilyStatus()
                 android.widget.Toast.makeText(this, "Status direfresh", android.widget.Toast.LENGTH_SHORT).show()
 
                 // Animate refresh
-                binding.lottieStatusIndicator.apply {
-                    speed = 3.0f
-                    playAnimation()
-                    postDelayed({
-                        speed = 1.5f
+                try {
+                    LottieUtils.setSpeed(binding.lottieStatusIndicator, 3.0f)
+                    binding.root.postDelayed({
+                        LottieUtils.setSpeed(binding.lottieStatusIndicator, 1.5f)
                     }, 1500)
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error animating refresh: ${e.message}")
                 }
                 true
             }
@@ -389,56 +386,38 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Update activity timestamp when resuming
         val familyId = FamilyManager.getFamilyId(this)
         if (!familyId.isNullOrEmpty()) {
             database.child("lastActivity").setValue(System.currentTimeMillis())
 
-            // Update connection status
             val connectionKey = if (FamilyManager.isParent(this)) "parentConnected" else "childConnected"
             database.child(connectionKey).setValue(true)
 
-            // Resume animations
-            if (!binding.lottieAstro.isAnimating) {
-                binding.lottieAstro.resumeAnimation()
-            }
-            if (!binding.lottieStatusIndicator.isAnimating) {
-                binding.lottieStatusIndicator.resumeAnimation()
-            }
+            // Resume animations safely
+            LottieUtils.resumeAnimation(binding.lottieAstro)
+            LottieUtils.resumeAnimation(binding.lottieStatusIndicator)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        // Optionally update connection status when pausing
-        // (Uncomment jika ingin strict tracking)
-        /*
-        val familyId = FamilyManager.getFamilyId(this)
-        if (!familyId.isNullOrEmpty()) {
-            val connectionKey = if (FamilyManager.isParent(this)) "parentConnected" else "childConnected"
-            database.child(connectionKey).setValue(false)
-        }
-        */
-
-        // Optionally pause animations to save battery
-        // binding.lottieAstro.pauseAnimation()
-        // binding.lottieStatusIndicator.pauseAnimation()
+        // Optional: pause animations to save battery
+        // LottieUtils.pauseAnimation(binding.lottieAstro)
+        // LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Remove listener untuk prevent memory leaks
+        // Remove listener dan cancel animations
         familyStatusListener?.let {
             database.removeEventListener(it)
         }
 
-        // Cancel any animations
-        binding.lottieAstro.cancelAnimation()
-        binding.lottieStatusIndicator.cancelAnimation()
+        LottieUtils.cancelAnimation(binding.lottieAstro)
+        LottieUtils.cancelAnimation(binding.lottieStatusIndicator)
     }
 
     override fun onBackPressed() {
-        // Override back button behavior
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluar Aplikasi?")
             .setMessage("Apakah Anda ingin menutup Papan Ajaib?")

@@ -4,41 +4,71 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.papanajaib.databinding.ActivitySplashBinding
 import com.example.papanajaib.utils.FamilyManager
-import com.example.papanajaib.utils.LottieUtils
 
 class SplashActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashBinding
     private val splashDelay = 3000L // 3 seconds
+    private val TAG = "SplashActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivitySplashBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        try {
+            Log.d(TAG, "SplashActivity onCreate started")
 
-        // Hide action bar for splash screen
-        supportActionBar?.hide()
+            binding = ActivitySplashBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-        setupLottieAnimations()
-        startSplashSequence()
+            // Hide action bar for splash screen
+            supportActionBar?.hide()
+
+            setupBasicLottieAnimations()
+            startSimpleSplashSequence()
+
+            Log.d(TAG, "SplashActivity onCreate completed")
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in onCreate", e)
+            // Fallback: langsung ke next screen jika ada error
+            navigateToNextScreenSafely()
+        }
     }
 
-    private fun setupLottieAnimations() {
-        // Setup main splash animation
-        LottieUtils.Presets.welcomeAnimation(binding.lottieSplashAstro)
+    private fun setupBasicLottieAnimations() {
+        try {
+            Log.d(TAG, "Setting up Lottie animations")
 
-        // Setup loading indicator
-        LottieUtils.Presets.statusIndicator(binding.lottieLoadingIndicator)
+            // Setup main splash animation dengan error handling
+            binding.lottieSplashAstro?.apply {
+                setAnimation("astro.json")
+                repeatCount = -1 // Infinite loop
+                speed = 1.0f
+                playAnimation()
+                Log.d(TAG, "Main Lottie animation started")
+            }
 
-        // Start with a welcome animation
-        LottieUtils.animateSuccess(binding.lottieSplashAstro, 1000L)
+            // Setup loading indicator dengan error handling
+            binding.lottieLoadingIndicator?.apply {
+                setAnimation("astro.json")
+                repeatCount = -1
+                speed = 2.0f
+                alpha = 0.8f
+                playAnimation()
+                Log.d(TAG, "Loading indicator animation started")
+            }
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error setting up Lottie animations", e)
+            // Continue without animations if they fail
+        }
     }
 
-    private fun startSplashSequence() {
+    private fun startSimpleSplashSequence() {
         val loadingMessages = arrayOf(
             "Memuat...",
             "Memeriksa konfigurasi...",
@@ -51,61 +81,92 @@ class SplashActivity : AppCompatActivity() {
 
         val updateMessage = object : Runnable {
             override fun run() {
-                if (currentMessageIndex < loadingMessages.size) {
-                    binding.tvLoadingText.text = loadingMessages[currentMessageIndex]
+                try {
+                    if (currentMessageIndex < loadingMessages.size) {
+                        // Safe update of loading text
+                        binding.tvLoadingText?.text = loadingMessages[currentMessageIndex]
 
-                    // Animate loading indicator speed based on progress
-                    val speed = 1.5f + (currentMessageIndex * 0.5f)
-                    binding.lottieLoadingIndicator.speed = speed
+                        // Update animation speed safely
+                        try {
+                            val speed = 1.0f + (currentMessageIndex * 0.3f)
+                            binding.lottieLoadingIndicator?.speed = speed
+                        } catch (e: Exception) {
+                            Log.w(TAG, "Could not update animation speed", e)
+                        }
 
-                    currentMessageIndex++
-                    messageHandler.postDelayed(this, 750L) // Update every 750ms
-                } else {
-                    // Final animation before navigating
-                    LottieUtils.animateSuccess(binding.lottieSplashAstro)
-                    LottieUtils.animateSuccess(binding.lottieLoadingIndicator)
-
-                    // Navigate to appropriate screen
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        navigateToNextScreen()
-                    }, 1000L)
+                        currentMessageIndex++
+                        messageHandler.postDelayed(this, 750L) // Update every 750ms
+                    } else {
+                        // Final phase - navigate to next screen
+                        Log.d(TAG, "Splash sequence completed, navigating...")
+                        navigateToNextScreenSafely()
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error in splash sequence", e)
+                    // Fallback navigation if sequence fails
+                    navigateToNextScreenSafely()
                 }
             }
         }
 
-        // Start the message update sequence
-Handler(Looper.getMainLooper()).postDelayed(updateMessage, 500L)    }
+        // Start the message update sequence with delay
+        messageHandler.postDelayed(updateMessage, 500L)
+    }
 
-    private fun navigateToNextScreen() {
-        val familyId = FamilyManager.getFamilyId(this)
+    private fun navigateToNextScreenSafely() {
+        try {
+            Log.d(TAG, "Navigating to next screen")
 
-        val intent = if (familyId.isNullOrEmpty()) {
-            // No family configuration, go to setup
-            Intent(this, SetupActivity::class.java)
-        } else {
-            // Has family configuration, go to main
-            Intent(this, MainActivity::class.java)
+            val familyId = FamilyManager.getFamilyId(this)
+            Log.d(TAG, "Family ID: $familyId")
+
+            val intent = if (familyId.isNullOrEmpty()) {
+                Log.d(TAG, "No family ID found, going to SetupActivity")
+                Intent(this, SetupActivity::class.java)
+            } else {
+                Log.d(TAG, "Family ID found, going to MainActivity")
+                Intent(this, MainActivity::class.java)
+            }
+
+            startActivity(intent)
+            finish()
+
+            // Add smooth transition
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error navigating to next screen", e)
+
+            // Ultimate fallback - go to SetupActivity
+            try {
+                startActivity(Intent(this, SetupActivity::class.java))
+                finish()
+            } catch (e2: Exception) {
+                Log.e(TAG, "Critical error: cannot navigate", e2)
+                // If even this fails, just finish the activity
+                finish()
+            }
         }
-
-        startActivity(intent)
-        finish()
-
-        // Add smooth transition
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Cancel animations to prevent memory leaks
-        LottieUtils.cancelAnimation(
-            binding.lottieSplashAstro,
-            binding.lottieLoadingIndicator
-        )
+        try {
+            Log.d(TAG, "SplashActivity onDestroy")
+
+            // Safe cleanup of animations
+            binding.lottieSplashAstro?.cancelAnimation()
+            binding.lottieLoadingIndicator?.cancelAnimation()
+
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in onDestroy", e)
+        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         // Disable back button on splash screen
-        // User should wait for splash to complete
+        Log.d(TAG, "Back button pressed - ignoring on splash screen")
+        // No super.onBackPressed() call to disable back button
     }
 }
