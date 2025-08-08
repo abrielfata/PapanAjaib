@@ -3,163 +3,248 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@color/modern_background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center">
+        android:padding="24dp">
 
-        <!-- Header -->
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_family"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="Family icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Modern Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/welcome_title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="8dp" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="48dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/welcome_subtitle"
-            android:textSize="16sp"
-            android:textAlignment="center"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="16dp" />
+            <View
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/ic_login"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome to\nPapan Ajaib"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="@color/modern_text"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Family task management made simple"
+                android:textSize="16sp"
+                android:textColor="@color/modern_text_secondary"
+                android:gravity="center" />
+
+        </LinearLayout>
 
         <!-- Restore Button (Hidden by default) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRestoreFamily"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Gunakan Konfigurasi Lama"
+            android:layout_height="52dp"
+            android:text="Continue with existing setup"
             android:textSize="14sp"
+            android:textAllCaps="false"
             android:visibility="gone"
-            android:layout_marginBottom="16dp"
-            app:icon="@drawable/ic_login"
-            app:backgroundTint="?attr/colorTertiary"
-            app:iconTint="?attr/colorOnTertiary" />
+            android:layout_marginBottom="24dp"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:backgroundTint="@color/parent_theme_onPrimaryContainer"
+            android:textColor="@color/modern_text"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_setting"
+            app:iconTint="@color/modern_text" />
 
+        <!-- Role Selection -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/who_are_you"
-            android:textSize="18sp"
+            android:text="Choose your role"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="16dp" />
+            android:textColor="@color/modern_text"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Card untuk Orang Tua -->
+        <!-- Parent Card - Modern Minimal -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:strokeColor="?attr/colorOutline"
-            app:strokeWidth="1dp">
+            app:cardBackgroundColor="@color/modern_surface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/parent_role"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorPrimary"
-                    android:layout_marginBottom="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/parent_desc"
-                    android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:layout_marginBottom="16dp" />
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/ic_parent_icon"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Parent"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/modern_text"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Create and manage family tasks"
+                            android:textSize="14sp"
+                            android:textColor="@color/modern_text_secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/family_name_hint"
+                    android:hint="Family Name"
                     android:layout_marginBottom="16dp"
-                    app:boxStrokeColor="?attr/colorPrimary">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/parent_theme_onPrimaryContainer"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:boxStrokeColor="@color/modern_primary"
+                    app:hintTextColor="@color/modern_text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFamilyName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapWords"
-                        android:maxLength="30" />
+                        android:maxLength="30"
+                        android:textColor="@color/modern_text"
+                        android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCreateFamily"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="@string/create_family"
+                    android:layout_height="52dp"
+                    android:text="Create Family"
                     android:textSize="16sp"
-                    app:icon="@drawable/ic_add" />
+                    android:textAllCaps="false"
+                    android:backgroundTint="@color/modern_primary"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card untuk Anak -->
+        <!-- Child Card - Modern Minimal -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
+            android:layout_marginBottom="32dp"
+            app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:strokeColor="?attr/colorOutline"
-            app:strokeWidth="1dp">
+            app:cardBackgroundColor="@color/modern_surface">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/child_role"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorSecondary"
-                    android:layout_marginBottom="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/child_desc"
-                    android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
-                    android:layout_marginBottom="16dp" />
+                    <View
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/ic_child_icon"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Child"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/modern_text"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Join an existing family"
+                            android:textSize="14sp"
+                            android:textColor="@color/modern_text_secondary" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/family_code_hint"
+                    android:hint="Family Code"
                     android:layout_marginBottom="16dp"
-                    app:boxStrokeColor="?attr/colorSecondary">
+                    app:boxBackgroundMode="filled"
+                    app:boxBackgroundColor="@color/parent_theme_onPrimaryContainer"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+                    app:boxStrokeColor="@color/modern_secondary"
+                    app:hintTextColor="@color/modern_text_secondary"
+                    app:helperText="Enter 6-character code"
+                    app:helperTextTextColor="@color/modern_text_secondary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etFamilyId"
@@ -167,22 +252,39 @@
                         android:layout_height="wrap_content"
                         android:inputType="textCapCharacters"
                         android:maxLength="6"
-                        android:textAllCaps="true" />
+                        android:textAllCaps="true"
+                        android:textColor="@color/modern_text"
+                        android:textSize="16sp"
+                        android:letterSpacing="0.2" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnJoinFamily"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="@string/join_family"
+                    android:layout_height="52dp"
+                    android:text="Join Family"
                     android:textSize="16sp"
-                    app:icon="@drawable/ic_login"
-                    app:iconGravity="textStart"/>
+                    android:textAllCaps="false"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:backgroundTint="@color/modern_primary"
+                    android:textColor="@color/white"
+                    android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="12dp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Simple Footer -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start your family's productivity journey"
+            android:textSize="14sp"
+            android:textColor="@color/modern_text_secondary"
+            android:gravity="center"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="?attr/colorSurface">
+    android:background="@color/primary_cream">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,14 +12,57 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Family Info Card -->
+        <!-- Minimal Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="40dp">
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="32dp"
+                android:background="@color/primary_medium_blue"
+                android:layout_marginEnd="16dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Papan Ajaib"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark_navy"
+                    android:fontFamily="sans-serif-light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Family Task Manager"
+                    android:textSize="14sp"
+                    android:textColor="@color/primary_medium_blue"
+                    android:layout_marginTop="2dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Family Info Card - Minimal -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="?attr/colorPrimaryContainer">
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/primary_light_blue">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,55 +73,54 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Informasi Keluarga"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:layout_marginBottom="12dp" />
+                    android:text="Family"
+                    android:textSize="12sp"
+                    android:textColor="@color/primary_medium_blue"
+                    android:textAllCaps="true"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/tvFamilyInfo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
-                    android:textSize="16sp"
-                    android:textColor="?attr/colorOnPrimaryContainer"
-                    android:lineSpacingExtra="4dp" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Connection Status Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            app:strokeColor="?attr/colorOutline"
-            app:strokeWidth="1dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tvConnectionStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="🔄 Memeriksa status..."
-                    android:textSize="14sp"
-                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="Loading family information..."
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_dark_navy"
                     android:lineSpacingExtra="2dp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Action Buttons -->
+        <!-- Status - Minimal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="@drawable/stats_background"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:background="@drawable/stats_background"
+                android:layout_marginEnd="12dp" />
+
+            <TextView
+                android:id="@+id/tvConnectionStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Checking status..."
+                android:textSize="13sp"
+                android:textColor="@color/primary_dark_navy" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons - Clean -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,84 +130,73 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnParentMode"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:text="🛠️ Mode Orang Tua"
+                android:layout_height="56dp"
+                android:text="Parent Mode"
                 android:textSize="16sp"
+                android:textAllCaps="false"
                 android:layout_marginBottom="12dp"
-                app:icon="@drawable/ic_parent_icon"
-                app:iconSize="24dp"
-                app:cornerRadius="12dp" />
+                android:backgroundTint="@color/primary_medium_blue"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp"
+                app:strokeWidth="0dp"
+                android:fontFamily="sans-serif-medium" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnChildMode"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:text="📋 Lihat Tugas"
+                android:layout_height="56dp"
+                android:text="Child Mode"
                 android:textSize="16sp"
-                android:layout_marginBottom="12dp"
-                app:icon="@drawable/ic_child_icon"
-                app:iconSize="24dp"
-                app:cornerRadius="12dp"
-                style="@style/Widget.Material3.Button.TonalButton" />
+                android:textAllCaps="false"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                app:strokeColor="@color/primary_medium_blue"
+                app:strokeWidth="1dp"
+                android:textColor="@color/primary_dark_navy"
+                app:cornerRadius="8dp"
+                android:fontFamily="sans-serif-medium" />
 
         </LinearLayout>
 
-        <!-- Settings Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pengaturan"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:layout_marginBottom="12dp" />
-
+        <!-- Settings - Minimal -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnResetFamily"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="⚙️ Reset Keluarga"
+            android:layout_height="48dp"
+            android:text="Settings"
             android:textSize="14sp"
-            app:icon="@drawable/ic_setting"
-            app:iconSize="20dp"
-            app:cornerRadius="8dp"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            android:textAllCaps="false"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:textColor="@color/primary_medium_blue"
+            android:layout_marginBottom="32dp" />
 
-        <!-- Tips Section -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Tips - Minimal -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="1dp"
-            app:cardBackgroundColor="?attr/colorSecondaryContainer">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/modern_tips_background">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tips"
+                android:textSize="12sp"
+                android:textColor="@color/primary_medium_blue"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:text="Share family code to invite members • Parents manage tasks • Children complete assignments"
+                android:textSize="14sp"
+                android:textColor="@color/primary_dark_navy"
+                android:lineSpacingExtra="3dp"
+                android:alpha="0.8" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="💡 Tips"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="• Bagikan kode keluarga kepada anggota keluarga lain\n• Orang tua dapat membuat dan mengelola tugas\n• Anak dapat melihat dan menyelesaikan tugas\n• Tekan menu ⋮ untuk opsi lainnya"
-                    android:textSize="12sp"
-                    android:textColor="?attr/colorOnSecondaryContainer"
-                    android:lineSpacingExtra="2dp" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -82,4 +82,15 @@
     <color name="gradient_end">#DBE2EF</color>
     <color name="gradient_primary_start">#3F72AF</color>
     <color name="gradient_primary_end">#112D4E</color>
+
+    <!-- Modern aliases for consistency -->
+    <color name="modern_background">@color/md_theme_background</color>
+    <color name="modern_surface">@color/md_theme_surface</color>
+    <color name="modern_primary">@color/md_theme_primary</color>
+    <color name="modern_secondary">@color/md_theme_secondary</color>
+    <color name="modern_text">@color/md_theme_onBackground</color>
+    <color name="modern_text_secondary">@color/md_theme_onSurfaceVariant</color>
+    <color name="modern_border">@color/md_theme_outline</color>
+    <color name="modern_error">@color/md_theme_error</color>
+    <color name="modern_success">@color/success_green</color>
 </resources>
