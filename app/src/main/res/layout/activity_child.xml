@@ -167,18 +167,19 @@
         android:clickable="true"
         android:focusable="true">
 
-        <!-- Lottie Animation View -->
+        <!-- Lottie Animation View for Astro -->
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_AnimationView"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
             android:layout_gravity="center"
-            android:visibility="gone"
+            android:visibility="visible"
             app:lottie_autoPlay="false"
             app:lottie_loop="false"
-            app:lottie_speed="1.0" />
+            app:lottie_speed="1.0"
+            app:lottie_repeatCount="1" />
 
-        <!-- Fallback Text Celebration -->
+        <!-- Fallback Text Celebration (shown if Lottie fails) -->
         <TextView
             android:id="@+id/celebrationText"
             android:layout_width="wrap_content"
@@ -192,7 +193,32 @@
             android:shadowRadius="10"
             android:shadowDx="2"
             android:shadowDy="2"
-            android:visibility="visible" />
+            android:visibility="gone" />
+
+        <!-- Optional: Additional text overlay on Lottie -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="280dp"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/celebrationSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tugas Selesai! 🌟"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:shadowColor="@android:color/black"
+                android:shadowRadius="5"
+                android:shadowDx="2"
+                android:shadowDy="2"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -212,12 +238,27 @@
         android:focusable="true"
         android:padding="32dp">
 
+        <!-- Could also use Lottie here for all tasks completed -->
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_AllCompleteAnimationView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_speed="0.8"
+            android:visibility="gone" />
+
+        <!-- Fallback trophy emoji -->
         <TextView
+            android:id="@+id/trophyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🏆"
             android:textSize="120sp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="24dp"
+            android:visibility="visible" />
 
         <TextView
             android:layout_width="wrap_content"

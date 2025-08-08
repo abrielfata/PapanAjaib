@@ -12,42 +12,64 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Minimal Header -->
+        <!-- Header with Lottie Animation -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="40dp">
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
-            <View
-                android:layout_width="4dp"
-                android:layout_height="32dp"
-                android:background="@color/primary_medium_blue"
-                android:layout_marginEnd="16dp" />
+            <!-- Lottie Animation -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieAstro"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginBottom="16dp"
+                app:lottie_rawRes="@raw/astro"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_speed="0.8" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Papan Ajaib"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary_dark_navy"
-                    android:fontFamily="sans-serif-light" />
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="32dp"
+                    android:background="@color/primary_medium_blue"
+                    android:layout_marginEnd="16dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Family Task Manager"
-                    android:textSize="14sp"
-                    android:textColor="@color/primary_medium_blue"
-                    android:layout_marginTop="2dp" />
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Papan Ajaib"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_dark_navy"
+                        android:fontFamily="sans-serif-light"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Family Task Manager"
+                        android:textSize="14sp"
+                        android:textColor="@color/primary_medium_blue"
+                        android:layout_marginTop="2dp"
+                        android:gravity="center" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -93,7 +115,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Status - Minimal -->
+        <!-- Status - Minimal with Lottie Indicator -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -103,11 +125,16 @@
             android:layout_marginBottom="32dp"
             android:gravity="center_vertical">
 
-            <View
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/stats_background"
-                android:layout_marginEnd="12dp" />
+            <!-- Small status indicator -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieStatusIndicator"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="12dp"
+                app:lottie_rawRes="@raw/astro"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_speed="1.5" />
 
             <TextView
                 android:id="@+id/tvConnectionStatus"

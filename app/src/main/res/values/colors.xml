@@ -83,6 +83,15 @@
     <color name="gradient_primary_start">#3F72AF</color>
     <color name="gradient_primary_end">#112D4E</color>
 
+    <color name="splash_background">#FFF8F4</color> <!-- Sama dengan primary_cream atau sesuaikan -->
+    <color name="splash_primary">#2E5266</color>     <!-- Sama dengan primary_dark_navy -->
+    <color name="splash_accent">#4A90A4</color>      <!-- Sama dengan primary_medium_blue -->
+
+    <!-- Warna untuk status dan loading -->
+    <color name="splash_loading">#87CEEB</color>     <!-- Sky blue untuk loading -->
+    <color name="splash_success">#90EE90</color>     <!-- Light green untuk success -->
+    <color name="splash_text_primary">#2E5266</color>
+    <color name="splash_text_secondary">#4A90A4</color>
     <!-- Modern aliases for consistency -->
     <color name="modern_background">@color/md_theme_background</color>
     <color name="modern_surface">@color/md_theme_surface</color>

@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieAnimationView
 import com.example.papanajaib.adapter.ChildMessageAdapter
 import com.google.firebase.database.*
 import com.example.papanajaib.data.Message
@@ -53,6 +54,7 @@ class ChildActivity : AppCompatActivity() {
         setupRecyclerView()
         setupSwipeRefresh()
         setupClickListeners()
+        setupLottieAnimation() // Setup Lottie animation
 
         showLoadingState()
         listenForMessages()
@@ -87,6 +89,39 @@ class ChildActivity : AppCompatActivity() {
         }
         binding.allTasksCompletedView.setOnClickListener {
             hideAllTasksCompletedView()
+        }
+    }
+
+    private fun setupLottieAnimation() {
+        try {
+            // Setup Lottie animation from raw resource
+            binding.lottieAnimationView.setAnimation(R.raw.astro)
+            binding.lottieAnimationView.repeatCount = 1 // Play twice
+            binding.lottieAnimationView.speed = 1.0f
+
+            // Set animation listener for better control
+            binding.lottieAnimationView.addAnimatorListener(object : android.animation.Animator.AnimatorListener {
+                override fun onAnimationStart(animation: android.animation.Animator) {
+                    Log.d("ChildActivity", "🎬 Lottie animation started")
+                }
+
+                override fun onAnimationEnd(animation: android.animation.Animator) {
+                    Log.d("ChildActivity", "🎬 Lottie animation ended")
+                    // Auto hide after animation completes
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        hideCelebrationOverlay()
+                    }, 500)
+                }
+
+                override fun onAnimationCancel(animation: android.animation.Animator) {}
+                override fun onAnimationRepeat(animation: android.animation.Animator) {}
+            })
+
+            Log.d("ChildActivity", "✅ Lottie animation setup successful")
+        } catch (e: Exception) {
+            Log.e("ChildActivity", "❌ Failed to setup Lottie animation", e)
+            // Hide Lottie view if setup fails
+            binding.lottieAnimationView.visibility = View.GONE
         }
     }
 
@@ -139,7 +174,6 @@ class ChildActivity : AppCompatActivity() {
                 isUpdatingMessage = false
             }
     }
-
 
     private fun listenForMessages() {
         binding.swipeRefreshLayout.isRefreshing = true
@@ -199,6 +233,9 @@ class ChildActivity : AppCompatActivity() {
 
         binding.tvProgress.text = "$completedTasks dari $totalTasks tugas selesai"
 
+        // Update percentage text
+        binding.tvProgressPercentage?.text = "$progressPercentage%"
+
         // Animate progress bar
         val animator = ObjectAnimator.ofInt(
             binding.progressIndicator,
@@ -231,6 +268,7 @@ class ChildActivity : AppCompatActivity() {
         binding.rvChildMessages.visibility = View.GONE
         binding.tvProgress.text = "0 dari 0 tugas selesai"
         binding.progressIndicator.progress = 0
+        binding.tvProgressPercentage?.text = "0%"
     }
 
     private fun hideEmptyState() {
@@ -239,25 +277,51 @@ class ChildActivity : AppCompatActivity() {
     }
 
     private fun showCelebrationOverlay() {
+        Log.d("ChildActivity", "🎉 Showing celebration overlay with Lottie")
+
         binding.celebrationOverlay.visibility = View.VISIBLE
         binding.celebrationOverlay.alpha = 0f
+
+        // Show and start Lottie animation if available
+        if (binding.lottieAnimationView.visibility != View.GONE) {
+            binding.lottieAnimationView.visibility = View.VISIBLE
+            binding.celebrationText.visibility = View.GONE // Hide fallback text
+
+            // Start Lottie animation
+            binding.lottieAnimationView.playAnimation()
+            Log.d("ChildActivity", "🚀 Started Lottie astro animation")
+        } else {
+            // Use fallback text animation
+            binding.celebrationText.visibility = View.VISIBLE
+            binding.lottieAnimationView.visibility = View.GONE
+
+            // Auto hide after delay if using fallback
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideCelebrationOverlay()
+            }, 2000)
+        }
+
+        // Fade in the overlay
         binding.celebrationOverlay.animate()
             .alpha(1f)
             .setDuration(300)
             .start()
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            hideCelebrationOverlay()
-        }, 1500)
     }
 
     private fun hideCelebrationOverlay() {
+        Log.d("ChildActivity", "🎉 Hiding celebration overlay")
+
         binding.celebrationOverlay.animate()
             .alpha(0f)
             .setDuration(300)
             .setListener(object : android.animation.AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: android.animation.Animator) {
                     binding.celebrationOverlay.visibility = View.GONE
+                    binding.lottieAnimationView.visibility = View.GONE
+                    binding.celebrationText.visibility = View.VISIBLE
+
+                    // Stop Lottie animation to save resources
+                    binding.lottieAnimationView.cancelAnimation()
                 }
             })
             .start()
@@ -296,13 +360,31 @@ class ChildActivity : AppCompatActivity() {
         animatorSet.start()
     }
 
-
     override fun onDestroy() {
         super.onDestroy()
         // Remove listener to prevent memory leaks
         valueEventListener?.let {
             database.removeEventListener(it)
         }
+
+        // Stop Lottie animation to prevent memory leaks
+        binding.lottieAnimationView.cancelAnimation()
     }
 
+    override fun onPause() {
+        super.onPause()
+        // Pause Lottie animation when activity is paused
+        if (binding.lottieAnimationView.isAnimating) {
+            binding.lottieAnimationView.pauseAnimation()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Resume Lottie animation if it was playing when paused
+        if (binding.celebrationOverlay.visibility == View.VISIBLE &&
+            binding.lottieAnimationView.visibility == View.VISIBLE) {
+            binding.lottieAnimationView.resumeAnimation()
+        }
+    }
 }

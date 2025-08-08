@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.airbnb.lottie.LottieAnimationView
 import com.example.papanajaib.databinding.ActivitySetupBinding
 import com.example.papanajaib.utils.FamilyManager
 import com.google.firebase.database.DataSnapshot
@@ -26,7 +27,74 @@ class SetupActivity : AppCompatActivity() {
         binding = ActivitySetupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupLottieAnimations()
         setupClickListeners()
+    }
+
+    private fun setupLottieAnimations() {
+        // Setup main welcome animation
+        binding.lottieWelcomeAstro.apply {
+            setAnimation("astro.json")
+            repeatCount = -1 // Infinite loop
+            speed = 0.6f
+            playAnimation()
+        }
+
+        // Setup parent card animation
+        binding.lottieParent.apply {
+            setAnimation("astro.json")
+            repeatCount = -1
+            speed = 1.2f
+            playAnimation()
+        }
+
+        // Setup child card animation
+        binding.lottieChild.apply {
+            setAnimation("astro.json")
+            repeatCount = -1
+            speed = 1.0f
+            playAnimation()
+        }
+
+        // Setup footer animation
+        binding.lottieFooter.apply {
+            setAnimation("astro.json")
+            repeatCount = -1
+            speed = 2.0f
+            playAnimation()
+        }
+    }
+
+    private fun animateSuccess() {
+        // Speed up all animations for success feedback
+        binding.lottieWelcomeAstro.speed = 2.0f
+        binding.lottieParent.speed = 2.5f
+        binding.lottieChild.speed = 2.5f
+        binding.lottieFooter.speed = 3.0f
+
+        // Reset speeds after animation
+        binding.root.postDelayed({
+            binding.lottieWelcomeAstro.speed = 0.6f
+            binding.lottieParent.speed = 1.2f
+            binding.lottieChild.speed = 1.0f
+            binding.lottieFooter.speed = 2.0f
+        }, 2000)
+    }
+
+    private fun animateLoading(isLoading: Boolean) {
+        if (isLoading) {
+            // Slow down animations during loading
+            binding.lottieWelcomeAstro.speed = 0.3f
+            binding.lottieParent.speed = 0.5f
+            binding.lottieChild.speed = 0.5f
+            binding.lottieFooter.speed = 1.0f
+        } else {
+            // Resume normal speeds
+            binding.lottieWelcomeAstro.speed = 0.6f
+            binding.lottieParent.speed = 1.2f
+            binding.lottieChild.speed = 1.0f
+            binding.lottieFooter.speed = 2.0f
+        }
     }
 
     private fun checkExistingConfiguration() {
@@ -50,8 +118,13 @@ class SetupActivity : AppCompatActivity() {
                                 "Selamat datang kembali! ($role - $familyName)",
                                 Toast.LENGTH_SHORT).show()
 
-                            startActivity(Intent(this@SetupActivity, MainActivity::class.java))
-                            finish()
+                            animateSuccess()
+
+                            // Delay to show success animation
+                            binding.root.postDelayed({
+                                startActivity(Intent(this@SetupActivity, MainActivity::class.java))
+                                finish()
+                            }, 1500)
                         } else {
                             // Family sudah tidak ada, bersihkan konfigurasi dan tampilkan setup
                             FamilyManager.clearFamilyConfig(this@SetupActivity)
@@ -74,12 +147,14 @@ class SetupActivity : AppCompatActivity() {
     }
 
     private fun showLoadingState(message: String) {
+        animateLoading(true)
         // Implement loading UI jika ada
         // binding.loadingView.visibility = View.VISIBLE
         // binding.setupOptions.visibility = View.GONE
     }
 
     private fun hideLoadingState() {
+        animateLoading(false)
         // binding.loadingView.visibility = View.GONE
         // binding.setupOptions.visibility = View.VISIBLE
     }
@@ -92,16 +167,32 @@ class SetupActivity : AppCompatActivity() {
 
     private fun showSetupOptions() {
         // Setup UI sudah ada, tidak perlu perubahan
+        // Resume normal animation speeds
+        animateLoading(false)
     }
 
     private fun setupClickListeners() {
         // Orang tua - buat keluarga baru
         binding.btnCreateFamily.setOnClickListener {
+            // Animate button press
+            binding.lottieParent.apply {
+                speed = 3.0f
+                postDelayed({
+                    speed = 1.2f
+                }, 1000)
+            }
             createNewFamily()
         }
 
         // Anak - gabung keluarga
         binding.btnJoinFamily.setOnClickListener {
+            // Animate button press
+            binding.lottieChild.apply {
+                speed = 3.0f
+                postDelayed({
+                    speed = 1.0f
+                }, 1000)
+            }
             joinExistingFamily()
         }
 
@@ -117,9 +208,15 @@ class SetupActivity : AppCompatActivity() {
             binding.btnRestoreFamily.text = "Gunakan Konfigurasi Lama ($familyId)"
 
             binding.btnRestoreFamily.setOnClickListener {
-                // Langsung gunakan konfigurasi lama tanpa verifikasi
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                // Animate restore
+                animateSuccess()
+
+                // Delay to show animation
+                binding.root.postDelayed({
+                    // Langsung gunakan konfigurasi lama tanpa verifikasi
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }, 1500)
             }
         }
     }
@@ -159,6 +256,9 @@ class SetupActivity : AppCompatActivity() {
     private fun createFamily(familyName: String) {
         val familyId = FamilyManager.generateFamilyId()
 
+        // Start loading animation
+        animateLoading(true)
+
         // Simpan data keluarga ke Firebase
         val familyData = mapOf(
             "name" to familyName,
@@ -186,12 +286,19 @@ class SetupActivity : AppCompatActivity() {
                 binding.btnCreateFamily.isEnabled = true
                 binding.btnCreateFamily.text = "Buat Keluarga Baru"
 
+                // Stop loading and show success animation
+                animateLoading(false)
+                animateSuccess()
+
                 // Tampilkan kode keluarga
                 showFamilyCode(familyId, familyName)
             }
             .addOnFailureListener { exception ->
                 binding.btnCreateFamily.isEnabled = true
                 binding.btnCreateFamily.text = "Buat Keluarga Baru"
+
+                // Stop loading animation
+                animateLoading(false)
 
                 Toast.makeText(this, "Gagal membuat keluarga: ${exception.message}",
                     Toast.LENGTH_SHORT).show()
@@ -219,6 +326,9 @@ class SetupActivity : AppCompatActivity() {
     }
 
     private fun joinFamily(familyId: String) {
+        // Start loading animation
+        animateLoading(true)
+
         binding.btnJoinFamily.isEnabled = false
         binding.btnJoinFamily.text = "Bergabung..."
 
@@ -235,6 +345,7 @@ class SetupActivity : AppCompatActivity() {
 
                         if (status != "active") {
                             binding.etFamilyId.error = "Keluarga ini tidak aktif"
+                            animateLoading(false)
                             return
                         }
 
@@ -253,21 +364,31 @@ class SetupActivity : AppCompatActivity() {
                             familyName = familyName
                         )
 
+                        // Stop loading and show success animation
+                        animateLoading(false)
+                        animateSuccess()
+
                         Toast.makeText(this@SetupActivity,
                             "Berhasil bergabung dengan $familyName!",
                             Toast.LENGTH_SHORT).show()
 
-                        // Pindah ke main activity
-                        startMainActivity()
+                        // Delay to show success animation
+                        binding.root.postDelayed({
+                            // Pindah ke main activity
+                            startMainActivity()
+                        }, 1500)
 
                     } else {
                         binding.etFamilyId.error = "Kode keluarga tidak ditemukan"
+                        animateLoading(false)
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     binding.btnJoinFamily.isEnabled = true
                     binding.btnJoinFamily.text = "Gabung ke Keluarga"
+
+                    animateLoading(false)
 
                     Toast.makeText(this@SetupActivity,
                         "Gagal mengecek kode keluarga: ${error.message}",
@@ -293,6 +414,41 @@ class SetupActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Resume all animations
+        if (!binding.lottieWelcomeAstro.isAnimating) {
+            binding.lottieWelcomeAstro.resumeAnimation()
+        }
+        if (!binding.lottieParent.isAnimating) {
+            binding.lottieParent.resumeAnimation()
+        }
+        if (!binding.lottieChild.isAnimating) {
+            binding.lottieChild.resumeAnimation()
+        }
+        if (!binding.lottieFooter.isAnimating) {
+            binding.lottieFooter.resumeAnimation()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Optionally pause animations to save battery
+        // binding.lottieWelcomeAstro.pauseAnimation()
+        // binding.lottieParent.pauseAnimation()
+        // binding.lottieChild.pauseAnimation()
+        // binding.lottieFooter.pauseAnimation()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Cancel all animations
+        binding.lottieWelcomeAstro.cancelAnimation()
+        binding.lottieParent.cancelAnimation()
+        binding.lottieChild.cancelAnimation()
+        binding.lottieFooter.cancelAnimation()
+    }
+
     override fun onBackPressed() {
         // Jika user menekan back, jangan keluar ke sistem
         // Tapi beri pilihan untuk tetap gunakan konfigurasi lama atau keluar
@@ -302,8 +458,11 @@ class SetupActivity : AppCompatActivity() {
                 .setTitle("Keluar Aplikasi?")
                 .setMessage("Anda memiliki konfigurasi keluarga ($familyId).\n\nApakah Anda ingin:\n• Gunakan konfigurasi lama\n• Keluar dari aplikasi")
                 .setPositiveButton("Gunakan Konfigurasi Lama") { _, _ ->
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
+                    animateSuccess()
+                    binding.root.postDelayed({
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }, 1500)
                 }
                 .setNegativeButton("Keluar") { _, _ ->
                     super.onBackPressed()

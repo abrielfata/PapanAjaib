@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Modern Header -->
+        <!-- Modern Header with Lottie -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -21,11 +21,16 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="48dp">
 
-            <View
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/ic_login"
-                android:layout_marginBottom="24dp" />
+            <!-- Large Lottie Animation for Welcome -->
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieWelcomeAstro"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginBottom="24dp"
+                app:lottie_rawRes="@raw/astro"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_speed="0.6" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,7 +82,7 @@
             android:fontFamily="sans-serif-medium"
             android:layout_marginBottom="24dp" />
 
-        <!-- Parent Card - Modern Minimal -->
+        <!-- Parent Card - Modern Minimal with Lottie -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,11 +104,16 @@
                     android:gravity="center_vertical"
                     android:layout_marginBottom="16dp">
 
-                    <View
+                    <!-- Small Lottie for Parent -->
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieParent"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/ic_parent_icon"
-                        android:layout_marginEnd="16dp" />
+                        android:layout_marginEnd="16dp"
+                        app:lottie_rawRes="@raw/astro"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_speed="1.2" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -174,7 +184,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Child Card - Modern Minimal -->
+        <!-- Child Card - Modern Minimal with Lottie -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -196,11 +206,16 @@
                     android:gravity="center_vertical"
                     android:layout_marginBottom="16dp">
 
-                    <View
+                    <!-- Small Lottie for Child -->
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottieChild"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:background="@drawable/ic_child_icon"
-                        android:layout_marginEnd="16dp" />
+                        android:layout_marginEnd="16dp"
+                        app:lottie_rawRes="@raw/astro"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_speed="1.0" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -276,15 +291,33 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Simple Footer -->
-        <TextView
+        <!-- Simple Footer with small Lottie -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start your family's productivity journey"
-            android:textSize="14sp"
-            android:textColor="@color/modern_text_secondary"
-            android:gravity="center"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieFooter"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                app:lottie_rawRes="@raw/astro"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_speed="2.0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start your family's productivity journey"
+                android:textSize="14sp"
+                android:textColor="@color/modern_text_secondary"
+                android:gravity="center" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
