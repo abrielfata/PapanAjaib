@@ -9,7 +9,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.papanajaib.databinding.ActivityMainBinding
 import com.example.papanajaib.utils.FamilyManager
-import com.example.papanajaib.utils.LottieUtils
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -30,53 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupUI()
-        setupLottieAnimations()
         setupClickListeners()
         monitorFamilyStatus()
-    }
-
-    // Update MainActivity.kt - bagian setupLottieAnimations()
-
-    private fun setupLottieAnimations() {
-        // PERBAIKAN: Gunakan raw resource daripada asset
-        // Setup main Lottie animation
-        binding.lottieAstro.apply {
-            setAnimation(R.raw.astro) // Gunakan resource ID
-            repeatCount = -1 // Infinite loop
-            speed = 0.8f
-            playAnimation()
-        }
-
-        // Setup status indicator animation
-        binding.lottieStatusIndicator.apply {
-            setAnimation(R.raw.astro) // Gunakan resource ID
-            repeatCount = -1
-            speed = 1.5f
-            playAnimation()
-        }
-    }
-
-
-    private fun updateLottieBasedOnStatus(isConnected: Boolean) {
-        try {
-            if (isConnected) {
-                LottieUtils.setSpeed(binding.lottieAstro, 1.0f)
-                LottieUtils.setAlpha(binding.lottieAstro, 1.0f)
-                LottieUtils.resumeAnimation(binding.lottieAstro)
-
-                LottieUtils.setSpeed(binding.lottieStatusIndicator, 2.0f)
-                LottieUtils.setAlpha(binding.lottieStatusIndicator, 1.0f)
-                LottieUtils.resumeAnimation(binding.lottieStatusIndicator)
-            } else {
-                LottieUtils.setSpeed(binding.lottieAstro, 0.3f)
-                LottieUtils.setAlpha(binding.lottieAstro, 0.5f)
-
-                LottieUtils.setSpeed(binding.lottieStatusIndicator, 0.5f)
-                LottieUtils.setAlpha(binding.lottieStatusIndicator, 0.7f)
-            }
-        } catch (e: Exception) {
-            Log.e("MainActivity", "Error updating Lottie status: ${e.message}")
-        }
     }
 
     private fun verifyFamilyConfiguration(): Boolean {
@@ -156,7 +110,6 @@ class MainActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 Log.e("MainActivity", "Family status monitoring failed", error.toException())
                 binding.tvConnectionStatus.text = "⚠️ Gagal memantau status keluarga"
-                updateLottieBasedOnStatus(false)
             }
         }
 
@@ -166,10 +119,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleFamilyDeleted() {
         Log.w("MainActivity", "Family was deleted from Firebase")
-
-        // Pause animations when family is deleted
-        LottieUtils.pauseAnimation(binding.lottieAstro)
-        LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
 
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Ditemukan")
@@ -216,9 +165,6 @@ class MainActivity : AppCompatActivity() {
         // Enable/disable tombol berdasarkan status
         val isConnected = if (FamilyManager.isParent(this)) parentConnected else childConnected
 
-        // Update Lottie animations based on connection status
-        updateLottieBasedOnStatus(isConnected)
-
         binding.btnParentMode.isEnabled = isConnected
         binding.btnChildMode.isEnabled = isConnected
 
@@ -232,10 +178,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleInactiveFamily() {
-        // Pause animations when family is inactive
-        LottieUtils.pauseAnimation(binding.lottieAstro)
-        LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
-
         androidx.appcompat.app.AlertDialog.Builder(this)
             .setTitle("Keluarga Tidak Aktif")
             .setMessage("Keluarga Anda telah dinonaktifkan.\n\nHubungi admin keluarga atau buat keluarga baru.")
@@ -249,28 +191,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.btnParentMode.setOnClickListener {
-            // Simple animation feedback
-            try {
-                LottieUtils.setSpeed(binding.lottieAstro, 2.0f)
-                binding.root.postDelayed({
-                    LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
-                }, 1000)
-            } catch (e: Exception) {
-                Log.e("MainActivity", "Error animating parent mode click: ${e.message}")
-            }
             startActivity(Intent(this, ParentActivity::class.java))
         }
 
         binding.btnChildMode.setOnClickListener {
-            // Simple animation feedback
-            try {
-                LottieUtils.setSpeed(binding.lottieAstro, 1.5f)
-                binding.root.postDelayed({
-                    LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
-                }, 1000)
-            } catch (e: Exception) {
-                Log.e("MainActivity", "Error animating child mode click: ${e.message}")
-            }
             startActivity(Intent(this, ChildActivity::class.java))
         }
 
@@ -303,16 +227,6 @@ class MainActivity : AppCompatActivity() {
             .removeValue()
             .addOnSuccessListener {
                 android.widget.Toast.makeText(this, "Semua pesan telah dihapus! 🧹", android.widget.Toast.LENGTH_SHORT).show()
-
-                // Animate success
-                try {
-                    LottieUtils.setSpeed(binding.lottieAstro, 3.0f)
-                    binding.root.postDelayed({
-                        LottieUtils.setSpeed(binding.lottieAstro, 0.8f)
-                    }, 2000)
-                } catch (e: Exception) {
-                    Log.e("MainActivity", "Error animating reset success: ${e.message}")
-                }
             }
             .addOnFailureListener { exception ->
                 android.widget.Toast.makeText(this, "Gagal reset pesan: ${exception.message}", android.widget.Toast.LENGTH_LONG).show()
@@ -341,16 +255,6 @@ class MainActivity : AppCompatActivity() {
             R.id.action_refresh -> {
                 monitorFamilyStatus()
                 android.widget.Toast.makeText(this, "Status direfresh", android.widget.Toast.LENGTH_SHORT).show()
-
-                // Animate refresh
-                try {
-                    LottieUtils.setSpeed(binding.lottieStatusIndicator, 3.0f)
-                    binding.root.postDelayed({
-                        LottieUtils.setSpeed(binding.lottieStatusIndicator, 1.5f)
-                    }, 1500)
-                } catch (e: Exception) {
-                    Log.e("MainActivity", "Error animating refresh: ${e.message}")
-                }
                 true
             }
             R.id.action_family_info -> {
@@ -392,29 +296,15 @@ class MainActivity : AppCompatActivity() {
 
             val connectionKey = if (FamilyManager.isParent(this)) "parentConnected" else "childConnected"
             database.child(connectionKey).setValue(true)
-
-            // Resume animations safely
-            LottieUtils.resumeAnimation(binding.lottieAstro)
-            LottieUtils.resumeAnimation(binding.lottieStatusIndicator)
         }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Optional: pause animations to save battery
-        // LottieUtils.pauseAnimation(binding.lottieAstro)
-        // LottieUtils.pauseAnimation(binding.lottieStatusIndicator)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        // Remove listener dan cancel animations
+        // Remove listener
         familyStatusListener?.let {
             database.removeEventListener(it)
         }
-
-        LottieUtils.cancelAnimation(binding.lottieAstro)
-        LottieUtils.cancelAnimation(binding.lottieStatusIndicator)
     }
 
     override fun onBackPressed() {

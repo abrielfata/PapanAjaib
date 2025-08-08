@@ -11,6 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="67dp"
         android:fillViewport="true">
 
         <LinearLayout
@@ -37,7 +38,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="👨‍👩‍👧‍👦 Mode Orang Tua"
+                        android:text="Mode Orang Tua"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:textColor="@color/parent_theme_onPrimary"
@@ -75,7 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="✨ Buat Pesan Baru"
+                        android:text="Buat Pesan Baru"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/parent_theme_onSurface"
@@ -113,7 +114,7 @@
                         android:id="@+id/tilMessageIcon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Tambahkan ikon (misal: 🍔, 🧸)"
+                        android:hint="Tambahkan ikon"
                         android:layout_marginBottom="16dp"
                         app:boxCornerRadiusBottomEnd="12dp"
                         app:boxCornerRadiusBottomStart="12dp"
@@ -174,7 +175,7 @@
                     android:id="@+id/tvStatistics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📊 Belum ada pesan yang dibuat"
+                    android:text="Belum ada pesan yang dibuat"
                     android:textSize="14sp"
                     android:textColor="@color/parent_theme_onSecondaryContainer"
                     android:padding="16dp"/>
