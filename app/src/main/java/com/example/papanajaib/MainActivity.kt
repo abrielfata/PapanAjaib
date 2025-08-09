@@ -93,14 +93,19 @@ class MainActivity : AppCompatActivity() {
             binding.btnChildMode.visibility = View.VISIBLE
             binding.btnParentMode.text = "Mode Orang Tua"
             binding.btnChildMode.text = "Lihat Sebagai Anak"
+
+            // Show settings button for parents
+            binding.btnResetFamily.visibility = View.VISIBLE
+            binding.btnResetFamily.text = "Settings"
         } else {
             binding.btnParentMode.visibility = View.GONE
             binding.btnChildMode.visibility = View.VISIBLE
             binding.btnChildMode.text = "Lihat Tugas"
-        }
 
-        // Show reset button only for parents
-        binding.btnResetFamily.visibility = if (isParent) View.VISIBLE else View.GONE
+            // Show logout button for children
+            binding.btnResetFamily.visibility = View.VISIBLE
+            binding.btnResetFamily.text = "Ganti Keluarga"
+        }
     }
 
     private fun monitorFamilyStatus() {
@@ -224,14 +229,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnResetFamily.setOnClickListener {
-            showResetFamilyDialog()
+            if (FamilyManager.isParent(this)) {
+                showParentSettingsDialog()
+            } else {
+                showChildLogoutDialog()
+            }
         }
     }
 
-    private fun showResetFamilyDialog() {
+    private fun showParentSettingsDialog() {
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Reset Keluarga")
-            .setMessage("Pilih jenis reset yang ingin dilakukan:")
+            .setTitle("Settings Keluarga")
+            .setMessage("Pilih aksi yang ingin dilakukan:")
             .setPositiveButton("Reset Pesan Saja") { _, _ ->
                 resetMessages()
             }
@@ -240,6 +249,42 @@ class MainActivity : AppCompatActivity() {
             }
             .setNegativeButton("Batal", null)
             .show()
+    }
+
+    private fun showChildLogoutDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Ganti Keluarga")
+            .setMessage("Anda akan keluar dari keluarga ini dan dapat bergabung dengan keluarga lain.\n\nApakah Anda yakin?")
+            .setPositiveButton("Ya, Ganti Keluarga") { _, _ ->
+                logoutChild()
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
+
+    private fun logoutChild() {
+        val familyId = FamilyManager.getFamilyId(this)
+
+        // Set child status to disconnected before leaving
+        if (!familyId.isNullOrEmpty()) {
+            FirebaseDatabase.getInstance()
+                .getReference("families")
+                .child(familyId)
+                .child("childConnected")
+                .setValue(false)
+        }
+
+        // Clear family configuration
+        FamilyManager.clearFamilyConfig(this)
+
+        // Show success message and redirect
+        android.widget.Toast.makeText(
+            this,
+            "Berhasil keluar dari keluarga! 👋",
+            android.widget.Toast.LENGTH_SHORT
+        ).show()
+
+        redirectToSetup("Logout dari keluarga")
     }
 
     private fun resetMessages() {
