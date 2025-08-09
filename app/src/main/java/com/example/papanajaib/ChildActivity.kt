@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.LottieAnimationView
 import com.example.papanajaib.adapter.ChildMessageAdapter
 import com.google.firebase.database.*
 import com.example.papanajaib.data.Message

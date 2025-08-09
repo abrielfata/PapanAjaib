@@ -28,7 +28,6 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             delay(3000) // Kurangi delay jadi 3 detik
 
-            // Pindah ke SetupActivity sebagai halaman selanjutnya
             val intent = Intent(this@SplashActivity, SetupActivity::class.java)
             startActivity(intent)
             finish() // Tutup SplashActivity agar tidak bisa kembali

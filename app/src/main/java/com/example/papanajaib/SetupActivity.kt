@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.airbnb.lottie.LottieAnimationView
 import com.example.papanajaib.databinding.ActivitySetupBinding
 import com.example.papanajaib.utils.FamilyManager
 import com.google.firebase.database.DataSnapshot
@@ -50,33 +49,6 @@ class SetupActivity : AppCompatActivity() {
             repeatCount = -1
             speed = 2.0f
             playAnimation()
-        }
-    }
-
-    // ALTERNATIF: Jika ingin tetap menggunakan assets, gunakan method ini
-    private fun setupLottieAnimationsFromAssets() {
-        // Pastikan file astro.json ada di app/src/main/assets/
-        try {
-            binding.lottieWelcomeAstro.apply {
-                setAnimation("astro.json")
-                repeatCount = -1
-                speed = 0.6f
-                playAnimation()
-            }
-
-            binding.lottieFooter.apply {
-                setAnimation("astro.json")
-                repeatCount = -1
-                speed = 2.0f
-                playAnimation()
-            }
-        } catch (e: Exception) {
-            // Fallback jika file tidak ditemukan
-            Toast.makeText(this, "Animation file not found. Using fallback.", Toast.LENGTH_SHORT).show()
-
-            // Gunakan animasi built-in atau disable animasi
-            binding.lottieWelcomeAstro.visibility = View.GONE
-            binding.lottieFooter.visibility = View.GONE
         }
     }
 

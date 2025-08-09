@@ -25,7 +25,6 @@ class ParentActivity : AppCompatActivity() {
     private lateinit var adapter: ParentMessageAdapter
     private lateinit var familyId: String
 
-    // Suggested icons dengan categories
     private val suggestedIcons = mapOf(
         "Mainan" to listOf("🧸", "🎮", "🎲", "🪀", "🎨"),
         "Makanan" to listOf("🍔", "🍽️", "🥛", "🍎", "🍪"),
